@@ -1,4 +1,6 @@
 <?php
+/*new*/
+
 class site extends model{
 
 	public function add($domain, $user_id,  $custom_name = '', $port = 80, $path = '/'){

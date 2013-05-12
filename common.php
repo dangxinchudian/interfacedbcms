@@ -124,57 +124,7 @@ function httpHeader($url, $port = 80){
 	curl_exec($curl);
 
 	$curlinfo = curl_getinfo($curl);
-	//print_r($curlinfo);
-/*
-	$hc = array();
-	# Informational 1xx
-	$hc['0'] = 'Unable to access'; 
-	$hc['100'] = 'Continue'; 
-	$hc['101'] = 'Switching Protocols';
-	# Successful 2xx 
-	$hc['200'] = 'OK';
-	$hc['201'] = 'Created';
-	$hc['202'] = 'Accepted';
-	$hc['203'] = 'Non-Authoritative Information';
-	$hc['204'] = 'No Content';
-	$hc['205'] = 'Reset Content';
-	$hc['206'] = 'Partial Content';
-	# Redirection 3xx 
-	$hc['300'] = 'Multiple Choices';
-	$hc['301'] = 'Moved Permanently';
-	$hc['302'] = 'Moved Temporarily';
-	$hc['303'] = 'See Other';
-	$hc['304'] = 'Not Modified';
-	$hc['305'] = 'Use Proxy';
-	$hc['306'] = '(Unused)';
-	$hc['307'] = 'Temporary Redirect';
-	# Client Error 4xx 
-	$hc['400'] = 'Bad Request';
-	$hc['401'] = 'Unauthorized';
-	$hc['402'] = 'Payment Required';
-	$hc['403'] = 'Forbidden';
-	$hc['404'] = 'Not Found';
-	$hc['405'] = 'Method Not Allowed';
-	$hc['406'] = 'Not Acceptable';
-	$hc['407'] = 'Proxy Authentication Required';
-	$hc['408'] = 'Request Timeout';
-	$hc['409'] = 'Conflict';
-	$hc['410'] = 'Gone';
-	$hc['411'] = 'Length Required';
-	$hc['412'] = 'Precondition Failed';
-	$hc['413'] = 'Request Entity Too Large';
-	$hc['414'] = 'Request-URI Too Long';
-	$hc['415'] = 'Unsupported Media Type';
-	$hc['416'] = 'Requested Range Not Satisfiable';
-	$hc['417'] = 'Expectation Failed';
-	# Server Error 5xx
-	$hc['500'] = 'Internal Server Error';
-	$hc['501'] = 'Not Implemented';
-	$hc['502'] = 'Bad Gateway';
-	$hc['503'] = 'Service Unavailable';
-	$hc['504'] = 'Gateway Timeout';
-	$hc['505'] = 'HTTP Version Not Supported';
-*/
+
 	$result = array(
 		'code' => $curlinfo['http_code'],
 		'status' => errorHeader($curlinfo['http_code']),
@@ -182,25 +132,48 @@ function httpHeader($url, $port = 80){
 	);
 	return $result;
 }
-
+/*
 function send_mail($mailAddress, $title, $content){
 
 	$mail = new PHPMailer();
 	$mail->IsSMTP();
-	$mail->SMTPDebug  = 0;
-	$mail->Host       = 'smtp.exmail.qq.com';
+	$mail->SMTPDebug  = 1;
+	//$mail->Host       = 'smtp.exmail.qq.com';
+	$mail->Host       = 'smtp.gmail.com';
 	$mail->Port       = 25;
 	$mail->SMTPAuth   = true;
-	$mail->Username   = '2259523843@qq.com';
-	$mail->Password   = 'zje06160616';
-	$mail->SetFrom('2259523843@qq.com', 'SECON监控中心');
-	$mail->AddAddress($mailAddress, 'SECON用户');
+	//$mail->Username   = '2259523843@qq.com';
+	$mail->Username   = 'support@secon.me';
+	//$mail->Password   = 'zje06160616';
+	$mail->Password   = 'secontech110';
+	//$mail->SetFrom('2259523843@qq.com', 'SECON监控中心');
+	$mail->SetFrom('support@secon.me', 'SECON用户');
+	$mail->AddAddress($mailAddress, 'SECON支持团队');
 	$mail->Subject = $title;
 	$mail->MsgHTML($content);
 	$mail->AltBody = 'This is a plain-text message body';
 	if(!$mail->Send()) return false;
 	else return true;
 
+}*/
+
+function send_mail($mailAddress, $title, $content){
+	$mail = new PHPMailer();
+	$mail->IsSMTP();
+	$mail->SMTPDebug  = 0;
+	$mail->Host       = 'smtp.gmail.com';
+	$mail->Port       = 587;
+	$mail->SMTPSecure = 'tls';
+	$mail->SMTPAuth   = true;
+	$mail->Username   = 'support@secon.me';
+	$mail->Password   = 'secontech110';
+	$mail->SetFrom('support@secon.me', 'SECON支持团队');
+	$mail->AddAddress($mailAddress, 'SECON用户');
+	$mail->Subject = $title;
+	$mail->MsgHTML($content);
+	$mail->AltBody = 'This is a plain-text message body';
+	if(!$mail->Send()) return false;
+	else return true;
 }
 
 function rolling_curl($urls, $callback, $body = true){

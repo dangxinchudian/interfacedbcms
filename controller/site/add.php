@@ -19,8 +19,6 @@ router('site-add',function(){
 	$result = $siteModel->add($domain, $user_id,  $custom_name, $port, $path);
 	if($result == false) json(false, '添加失败');
 
-
-
 	json(true, '添加成功');
 
 });

@@ -66,6 +66,8 @@ require('phpmailer/class.phpmailer.php');
 
 require('./controller/user/login.php');
 require('./controller/user/reg.php');
+require('./controller/user/mail.php');
+require('./controller/user/mail-verify.php');
 
 require('./controller/site/add.php');
 //require('./controller/server/add.php');
@@ -80,7 +82,7 @@ router('test2',function(){
 
 router('test3', function(){
 
-	send_mail('zje2008@vip.163.com', 'hi', '2321');
+	send_mail('zje2008@vip.163.com', 'hi', '2321你好吗？');
 });
 
 /*================路由表<结束>========================*/

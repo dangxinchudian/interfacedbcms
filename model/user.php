@@ -1,4 +1,6 @@
 <?php
+/*new*/
+
 class user extends model{
 
 	public function sessionCheck($callback = false){
@@ -45,6 +47,15 @@ class user extends model{
 
 	public function update($user_id, $updateArray){
 		return $this->db()->update('user', $updateArray, "user_id = '{$user_id}'");
+	}
+
+	public function mailCodeCreat($user_id){
+		$updateArray = array(
+			'code_mail' => md5(random('str', '20')),
+			'code_mail_time' => time() + 60 * 60		//有效时间为一个小时
+		);
+		$this->update($user_id, $updateArray);
+		return $updateArray['code_mail'];
 	}
 
 }
