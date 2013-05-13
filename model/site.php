@@ -3,14 +3,15 @@
 
 class site extends model{
 
-	public function add($domain, $user_id,  $custom_name = '', $port = 80, $path = '/'){
+	public function add($domain, $user_id,  $custom_name = '', $port = 80, $path = '/', $period = 60){
 		$insertArray = array(
 			'domain' => $domain, 
 			'user_id' => $user_id,
 			'creat_time' => time(),
 			'custom_name' => $custom_name,
 			'port' => $port,
-			'path' => $path
+			'path' => $path,
+			'period' => $period
 
 		);
 		$result = $this->db()->insert('site', $insertArray);
@@ -163,6 +164,8 @@ class site extends model{
 			$sql = "DROP DATABASE `molog_{$site_id}`;";
 			$sql .= "DROP DATABASE `mosite_{$site_id}`;";
 			$this->db()->query($sql, 'exec');
+			$updateArray = array('remove' => 2);
+			$result = $this->update($site_id, $updateArray);
 			return true;
 		}else{
 			$updateArray = array('remove' => 1);
