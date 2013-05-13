@@ -2,8 +2,8 @@
 
 //router('user-reset',function(){
 
-	/*$user = model('user');
-	$user_id = $user->sessionCheck(function(){
+	$user = model('user');
+	/*$user_id = $user->sessionCheck(function(){
 		json(false, '未登录');
 	});*/
 
