@@ -14,7 +14,7 @@
 	$info = $user->get($mail, 'mail');
 	if(empty($info)) json(false, '邮箱不存在');
 	$code = $user->resetCodeCreat($info['user_id']);
-	$html = "<a href=\"http://monitor.secon.me/mail-reset?code={$code}&mail={$info['mail']}\" target=\"_blank\">http://monitor.secon.me/mail-reset?code={$code}&mail={$info['mail']}</a>";
+	$html = "<a href=\"http://monitor.secon.me/setting-password?code={$code}&mail={$info['mail']}\" target=\"_blank\">http://monitor.secon.me/mail-reset?code={$code}&mail={$info['mail']}</a>";
 	send_mail($info['mail'], '帐号找回', $html);
 
 	json(true, '发送成功');
