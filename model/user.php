@@ -24,6 +24,16 @@ class user extends model{
 		return $this->db()->insertId();
 	}
 
+	public function setPass($user_id, $pass){
+		$salt = random('str', 27);
+		$passwd = $this->passEncode($pass, $salt);
+		$updateArray = array(
+			'usalt' => $salt,
+			'passwd' => $passwd
+		);
+		$this->update($user_id, $updateArray);
+	}
+
 	public function passEncode($pass, $salt){
 		return md5($salt.'?'.$salt.'='.$pass);
 	}
@@ -56,6 +66,15 @@ class user extends model{
 		);
 		$this->update($user_id, $updateArray);
 		return $updateArray['code_mail'];
+	}
+
+	public function resetCodeCreat($user_id){
+		$updateArray = array(
+			'code_reset' => md5(random('str', '20')),
+			'code_reset_time' => time() + 60 * 60		//有效时间为一个小时
+		);
+		$this->update($user_id, $updateArray);
+		return $updateArray['code_reset'];
 	}
 
 }

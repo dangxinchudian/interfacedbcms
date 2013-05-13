@@ -1,6 +1,5 @@
 <?php
 
-router('user-mail',function(){
 
 	$user = model('user');
 	$user_id = $user->sessionCheck(function(){
@@ -13,8 +12,6 @@ router('user-mail',function(){
 	send_mail($info['mail'], '邮箱验证', $html);
 
 	json(true, '发送成功');
-
-});
 
 
 

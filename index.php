@@ -38,12 +38,23 @@ function json($result, $value){
 
 /*POST过滤器*/	//符合rule返回字符串，否则触发callback，optional为真则返回null
 function filter($name, $rule, $callback, $optional = false){
-	if(isset($_POST[$name]) && preg_match($rule, $post = trim($_POST[$name]))) return $post;
-	elseif($optional === false){
-		if(is_object($callback)) return $callback();
-		else json(false, $callback);
+	if($optional !== false){
+		if(isset($_POST[$name])){
+			if(preg_match($rule, $post = trim($_POST[$name]))) return $post;
+			else{
+				if(is_object($callback)) return $callback();
+				else json(false, $callback);			
+			}
+		}elseif($optional === true) return null;
+		else return $optional;
+	}else{
+		if(isset($_POST[$name]) && preg_match($rule, $post = trim($_POST[$name]))) return $post;
+		else{
+			if(is_object($callback)) return $callback();
+			else json(false, $callback);			
+		} 
 	}
-	return $optional;
+
 }
 
 /*模型*/
@@ -64,16 +75,31 @@ require('phpmailer/class.phpmailer.php');
 
 /*================路由表<开始>========================*/
 
-require('./controller/user/login.php');
-require('./controller/user/reg.php');
-require('./controller/user/mail.php');
-require('./controller/user/mail-verify.php');
+router('user-login', function(){ require('./controller/user/login.php'); });
+router('user-reg',function(){ require('./controller/user/reg.php'); });
+router('user-mail',function(){ require('./controller/user/mail.php'); });
+router('user-mail-verify',function(){ require('./controller/user/mail-verify.php'); });
+router('user-reset',function(){ require('./controller/user/reset.php'); });
+router('user-reset-verify',function(){ require('./controller/user/reset-verify.php'); });
 
-require('./controller/site/add.php');
+router('notice-max',function(){ require('./controller/notice/max.php'); });
+
+router('site-add',function(){ require('./controller/site/add.php'); });
+router('site-remove',function(){ require('./controller/site/remove.php'); });
+
+//require('./controller/user/reg.php');
+//require('./controller/user/mail.php');
+//require('./controller/user/mail-verify.php');
+//require('./controller/user/reset.php');
+//require('./controller/user/reset-verify.php');
+
+//require('./controller/notice/max.php');
+
+//require('./controller/site/add.php');
 //require('./controller/server/add.php');
 
 router('test',function(){
-	echo '<form method="POST" action="./user.login"><input name="mail" value="zje2008@qq.com"/><input name="pass" value="b123456"/><input type="submit"/></form>';
+	echo '<form method="POST" action="./user-login"><input name="mail" value="zje2008@qq.com"/><input name="pass" value="b123456"/><input type="submit"/></form>';
 });
 
 router('test2',function(){
@@ -81,8 +107,7 @@ router('test2',function(){
 });
 
 router('test3', function(){
-
-	send_mail('zje2008@vip.163.com', 'hi', '2321你好吗？');
+	//echo '<form method="POST" action="./notice-max"><!--<input name="max" value="11a"/>--><input type="submit"/></form>';
 });
 
 /*================路由表<结束>========================*/

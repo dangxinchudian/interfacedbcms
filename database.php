@@ -95,6 +95,13 @@ class database {
 		return $this->dbObj->rollBack();
 	}
 
+	public function checkSchema($schema){
+		$sql = "SELECT * FROM information_schema.TABLES WHERE table_schema='{$schema}'";
+		$result = $this->dbObj->query($sql,'row');
+		if(empty($result)) return false;
+		return true;
+	}
+
 }
 
 ?>

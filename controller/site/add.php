@@ -1,6 +1,6 @@
 <?php
 
-router('site-add',function(){
+//router('site-add',function(){
 
 	$user = model('user');
 	$user_id = $user->sessionCheck(function(){
@@ -21,6 +21,6 @@ router('site-add',function(){
 
 	json(true, '添加成功');
 
-});
+//});
 
 ?>

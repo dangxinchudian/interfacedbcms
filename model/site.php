@@ -152,10 +152,25 @@ class site extends model{
 	public function get($value, $type = 'site_id'){
 		$whereArray = array(
 			'site_id' => " site_id = '{$value}' ",
-			'domain' => " domain = '{$value}' "
+			'domain' => " domain = '{$value}' AND remove = 0"
 		);
 		$sql = "SELECT * FROM site WHERE {$whereArray[$type]}";
 		return $this->db()->query($sql, 'row');
+	}
+
+	public function remove($site_id, $destroy = false){
+		if($destroy){
+			$sql = "DROP DATABASE `molog_{$site_id}`;";
+			$sql .= "DROP DATABASE `mosite_{$site_id}`;";
+			$this->db()->query($sql, 'exec');
+			return true;
+		}else{
+			$updateArray = array('remove' => 1);
+			$result = $this->update($site_id, $updateArray);
+			if($result > 0) return true;
+		}
+		return false;
+		//$this->db()->checkSchema($schema);
 	}
 
 	public function update($site_id, $updateArray){

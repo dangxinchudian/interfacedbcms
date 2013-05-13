@@ -1,6 +1,6 @@
 <?php
 
-//router('user-mail-verify',function(){
+//router('user-reset-verify',function(){
 
 	$user = model('user');
 	/*$user_id = $user->sessionCheck(function(){
@@ -9,19 +9,20 @@
 
 	$mail = filter('mail', '/^([a-z0-9\+_\-]+)(\.[a-z0-9\+_\-]+)*@([a-z0-9\-]+\.)+[a-z]{2,6}$/ix', '邮箱格式不符');
 	$code = filter('code', '/^[a-fA-F0-9]{32}$/', 'code需要为32位hash字符');
+	$pass = filter('pass', '/^.{6,30}$/', '密码需要为6-30位字符');
 
 	/*$mail = 'zje2008@qq.com';
-	$code = '2e4c14a915e680fc7936f948fe9c69c0';*/
+	$code = 'f05e6a0866eb69bb6660b3ad49dc6b46';
+	$pass = 'a123456';*/
 
 	$info = $user->get($mail, 'mail');
 	if(empty($info)) json(false, '邮箱不存在');
-	if($code != $info['code_mail']) json(false, '验证码错误');
-	if($info['code_mail_time'] < time()) json(false, '已经过期');
+	if($code != $info['code_reset']) json(false, '验证码错误');
+	if($info['code_reset_time'] < time()) json(false, '已经过期');
 
-	$updateArray = array('mail_verify' => 1);
-	$user->update($info['user_id'], $updateArray);
+	$user->setPass($info['user_id'], $pass);
 
-	json(true, '验证成功');
+	json(true, '重置成功');
 
 //});
 

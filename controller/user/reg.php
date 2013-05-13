@@ -1,6 +1,6 @@
 <?php
 
-router('user-reg',function(){
+
 	$mail = filter('mail', '/^([a-z0-9\+_\-]+)(\.[a-z0-9\+_\-]+)*@([a-z0-9\-]+\.)+[a-z]{2,6}$/ix', '邮箱格式不符');
 	$pass = filter('pass', '/^.{6,30}$/', '密码需要为6-30位字符');
 
@@ -17,6 +17,6 @@ router('user-reg',function(){
 
 	$user->login($user_id);
 	json(true, '创建成功');
-});
+
 
 ?>
