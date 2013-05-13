@@ -1,6 +1,6 @@
 <?php
 
-router('server-add',function(){
+//router('server-add',function(){
 
 	$user = model('user');
 	$user_id = $user->sessionCheck(function(){
@@ -24,6 +24,6 @@ router('server-add',function(){
 	$constantModel->update($result, array('path' => $path));
 	json(true, '添加成功');*/
 
-});
+//});
 
 ?>

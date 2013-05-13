@@ -178,16 +178,14 @@ class site extends model{
 	}
 
 	public function siteList($user_id, $start, $limit, $remove = 0){		//1:remove,0:normal,-1:all
-		if($remove == 0) $remove = ' AND remove = \'0\'';
-		elseif($remove == 1) $remove = ' AND remove = \'1\'';
+		if($remove >= 0) $remove = ' AND remove = \'{$remove}\'';
 		else $remove = '';
 		$sql = "SELECT * FROM site WHERE user_id = '{$user_id}' {$remove} LIMIT {$start},{$limit}";
 		return $this->db()->query($sql, 'array');
 	}
 
 	public function siteCount($user_id, $remove = 0){
-		if($remove == 0) $remove = ' AND remove = \'0\'';
-		elseif($remove == 1) $remove = ' AND remove = \'1\'';
+		if($remove >= 0) $remove = ' AND remove = \'{$remove}\'';
 		else $remove = '';
 		$sql = "SELECT count(site_id) FROM site WHERE user_id = '{$user_id}' {$remove}";
 		$result = $this->db()->query($sql, 'row');
