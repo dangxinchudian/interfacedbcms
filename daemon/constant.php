@@ -44,7 +44,16 @@ $callback = function($data, $info, $self){
     )";
     $db->query($sql, 'exec');
     $time = time();
-    $sql = "UPDATE monitor.site SET last_watch_time = '{$time}' WHERE site.site_id = '{$self['site_id']}'";
+
+    if($self['node_id'] != 0){
+        $sql = "UPDATE monitor.site SET last_watch_time = '{$time}' WHERE site.site_id = '{$self['site_id']}'"; 
+    }else{
+        //距离上次访问时间超过2倍的间隔时间就算中间停止过，重新计算，否则进行粘滞计算(time()-last_watch_time)
+        $middle_time = $time - $self['last_watch_time'];
+        if($middle_time > 2 * $self['period']) $middle_time = 0;
+
+        $sql = "UPDATE monitor.site SET last_watch_time = '{$time}',keep_watch_time = keep_watch_time + {$middle_time} WHERE site.site_id = '{$self['site_id']}'";
+    }
     $db->query($sql, 'exec');
 	//echo "{$self['site_id']} : {$info['url']}   {$info['total_time']}\n";
 };
@@ -56,7 +65,7 @@ for(;;){
     $node = $db->query($sql, 'array');
 
     //url-list
-    $sql = "SELECT site_id,domain,path,port FROM monitor.site WHERE last_watch_time + period < $time  AND remove = '0' AND constant_status = '1'";
+    $sql = "SELECT site_id,domain,path,port,last_watch_time,period FROM monitor.site WHERE last_watch_time + period < $time  AND remove = '0' AND constant_status = '1'";
     $result = $db->query($sql, 'array');
 
     $urls = array();
@@ -64,8 +73,10 @@ for(;;){
         $urls[$value['domain']] = array(
             'url' =>"http://{$value['domain']}{$value['path']}", 
             'port' => $value['port'],
-            'site_id' =>$value['site_id'],
-            'node_id' => 0
+            'site_id' => $value['site_id'],
+            'node_id' => 0,
+            'last_watch_time' => $value['last_watch_time'],
+            'period' => $value['period']
         );
     }
     $local = rolling_curl($urls, $callback, false);
@@ -78,7 +89,9 @@ for(;;){
                 'url' =>"{$nodevalue['url']}?url={$encode_url}&port={$value['port']}", 
                 'port' => 80,
                 'site_id' => $value['site_id'],
-                'node_id' => $nodevalue['constant_node_id']
+                'node_id' => $nodevalue['constant_node_id'],
+                'last_watch_time' => $value['last_watch_time'],
+                'period' => $value['period']
             );
         }
         $node[$nodekey]['count'] = rolling_curl($urls, $callback, true);

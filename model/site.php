@@ -63,7 +63,7 @@ class site extends model{
 					`pretransfer_time` decimal(9,6) NOT NULL DEFAULT '0.000000',
 					`total_time` decimal(9,6) NOT NULL DEFAULT '0.000000',
 					`namelookup_time` decimal(9,6) NOT NULL DEFAULT '0.000000',
-					`connect_time` decimal(9,6) NOT NULL,
+					`connect_time` decimal(9,6) NOT NULL DEFAULT '0.000000',
 					`redirect_time` decimal(9,6) NOT NULL DEFAULT '0.000000',
 					`status` smallint(5) unsigned NOT NULL COMMENT '状态值',
 					`constant_node_id` int(10) unsigned NOT NULL COMMENT '监测节点/如果为0的话是本机',
@@ -153,9 +153,10 @@ class site extends model{
 	public function get($value, $type = 'site_id'){
 		$whereArray = array(
 			'site_id' => " site_id = '{$value}' ",
-			'domain' => " domain = '{$value}' AND remove = 0"
+			'domain' => " domain = '{$value}' AND remove = 0",
+			'user_id' => " user_id = '{$value}' AND remove = 0"
 		);
-		$sql = "SELECT * FROM site WHERE {$whereArray[$type]}";
+		$sql = "SELECT * FROM site WHERE {$whereArray[$type]} ORDER BY creat_time ASC LIMIT 1";
 		return $this->db()->query($sql, 'row');
 	}
 

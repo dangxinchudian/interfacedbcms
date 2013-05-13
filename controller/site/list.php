@@ -24,10 +24,10 @@
 	$result = $siteModel->siteList($user_id, $start, $limit, 0);
 	$count = $siteModel->siteCount($user_id, 0);
 	foreach ($result as $key => $value) {
-		$result[$key]['work_time'] = $constantModel->work_time($value['site_id'], $start_time, $stop_time, $value['period']);
-		$result[$key]['avail_time'] = $constantModel->avail_time($value['site_id'], $start_time, $stop_time, $value['period']);
-		$result[$key]['available'] = round($result[$key]['avail_time'] / $result[$key]['work_time'] * 100, 2);
-		$result[$key]['fault_time'] = $result[$key]['work_time'] - $result[$key]['avail_time'];
+		//$result[$key]['work_time'] = $constantModel->work_time($value['site_id'], $start_time, $stop_time, $value['period'], 0);
+		$result[$key]['fault_time'] = $constantModel->log_fault_time($value['site_id'], $start_time, $stop_time, $value['period'], 0);		//临时替代
+		$result[$key]['available'] = $constantModel->available($value['site_id'], $start_time, $stop_time);
+
 	}
 	$array = array(
 		'page' => $page,

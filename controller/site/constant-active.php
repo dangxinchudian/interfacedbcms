@@ -13,6 +13,8 @@
 
 	$siteModel = model('site');
 	$info = $siteModel->get($site_id);
+	if(empty($info)) json(false, '站点不存在');
+	if($info['remove'] > 0) json(false, '站点已经被移除');
 	if($info['user_id'] != $user_id) json(false, '不允许操作他人站点');
 
 	if($active == 'start') $updateArray = array('constant_status' => 1);
