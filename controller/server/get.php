@@ -23,6 +23,19 @@
 	$info['sys_descr'] = jdecode($info['sys_descr']);
 	$info['sys_name'] = jdecode($info['sys_name']);
 	$info['sys_uptime'] = jdecode($info['sys_uptime']);
+	$token = $info['snmp_token'];
+	unset($info['snmp_token']);
+	
+	$info['snmp_community'] = '';
+	$info['snmp_user'] = '';
+	$info['snmp_pass'] = '';
+	if($info['snmp_version'] == 3){
+		$token = explode('|', $info['snmp_token']);
+		$info['snmp_user'] = $token[0];
+		$info['snmp_pass'] = $token[1];
+	}else{
+		$info['snmp_community'] = jdecode($info['snmp_token']);
+	}
 
 	json(true, $info);
 

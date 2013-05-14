@@ -8,7 +8,8 @@ class server extends model{
 			'user_id' => $user_id,
 			'creat_time' => time(),
 			'custom_name' => $custom_name,
-			'period' => $period
+			'period' => $period,
+			'snmp_token' => jencode('public')
 		);
 		$result = $this->db()->insert('server', $insertArray);
 		if($result == 0) return false;
@@ -97,7 +98,10 @@ class server extends model{
 
 	public function itemSql($item, $device_id){
 		$array = array(
-			'cpu' => "CREATE TABLE IF NOT EXISTS `cpu_{$device_id}_log` ( `id` char(36) NOT NULL, `used` tinyint(3) unsigned NOT NULL COMMENT '使用百分比', `time` datetime NOT NULL );"
+			'cpu' => "CREATE TABLE IF NOT EXISTS `cpu_{$device_id}_log` ( `id` char(36) NOT NULL, `used` tinyint(3) unsigned NOT NULL COMMENT '使用百分比', `time` datetime NOT NULL );",
+			'memory' => "CREATE TABLE IF NOT EXISTS `memory_{$device_id}_log` ( `id` char(36) NOT NULL, `used_amount` int(10) unsigned NOT NULL COMMENT '使用量', `total_amount` int(10) unsigned NOT NULL COMMENT '总量', `time` datetime NOT NULL );",
+			'processcount' => "CREATE TABLE IF NOT EXISTS `processcount_{$device_id}_log` ( `id` char(36) NOT NULL, `amount` int(10) unsigned NOT NULL COMMENT '数量', `time` datetime NOT NULL );",
+			'disk' => "CREATE TABLE IF NOT EXISTS `disk_{$device_id}_log` ( `id` char(36) NOT NULL, `used_amount` int(10) unsigned NOT NULL COMMENT '使用量', `total_amount` int(10) unsigned NOT NULL COMMENT '总量', `time` datetime NOT NULL );",
 		);
 	}
 

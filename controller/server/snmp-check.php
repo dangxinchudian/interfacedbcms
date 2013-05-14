@@ -16,7 +16,7 @@
 
 	$snmpModel = model('snmpCatch');
 	$snmpModel->ip = $info['ip'];
-	$snmpModel->community = $info['snmp_token'];
+	$snmpModel->community = jdecode($info['snmp_token']);
 	//$snmpModel->ip = '61.175.163.196';
 
 	$result['os'] = $snmpModel->os();
