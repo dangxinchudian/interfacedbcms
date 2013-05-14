@@ -34,7 +34,7 @@ class server extends model{
 		return $this->db()->query($sql, 'row');
 	}
 
-	public function remove($site_id, $destroy = false){
+	/*public function remove($site_id, $destroy = false){
 		if($destroy){
 			$sql = "DROP DATABASE `molog_{$site_id}`;";
 			$sql .= "DROP DATABASE `mosite_{$site_id}`;";
@@ -49,7 +49,7 @@ class server extends model{
 		}
 		return false;
 		//$this->db()->checkSchema($schema);
-	}
+	}*/
 
 	public function serverList($user_id, $start, $limit, $remove = 0){		//1:remove,0:normal,-1:all
 		if($remove >= 0) $remove = ' AND remove = \'{$remove}\'';

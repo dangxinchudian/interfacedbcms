@@ -86,12 +86,13 @@ router('notice-max',function(){ require('./controller/notice/max.php'); });
 
 router('site-add',function(){ require('./controller/site/add.php'); });
 router('site-remove',function(){ require('./controller/site/remove.php'); });
-router('site-list',function(){ require('./controller/site/list.php'); });
 router('site-modify',function(){ require('./controller/site/modify.php'); });
 
+router('site-constant-list',function(){ require('./controller/site/constant-list.php'); });
 router('site-constant-active',function(){ require('./controller/site/constant-active.php'); });
 router('site-constant-node',function(){ require('./controller/site/constant-node.php'); });
 router('site-constant-detail',function(){ require('./controller/site/constant-detail.php'); });
+router('site-constant-get',function(){ require('./controller/site/constant-get.php'); });
 
 router('server-add',function(){ require('./controller/server/add.php'); });
 router('server-snmp-check',function(){ require('./controller/server/snmp-check.php'); });
