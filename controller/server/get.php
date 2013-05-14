@@ -30,11 +30,11 @@
 	$info['snmp_user'] = '';
 	$info['snmp_pass'] = '';
 	if($info['snmp_version'] == 3){
-		$token = explode('|', $info['snmp_token']);
+		$token = explode('|', $token);
 		$info['snmp_user'] = $token[0];
 		$info['snmp_pass'] = $token[1];
 	}else{
-		$info['snmp_community'] = jdecode($info['snmp_token']);
+		$info['snmp_community'] = jdecode($token);
 	}
 
 	json(true, $info);
