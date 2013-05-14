@@ -91,6 +91,13 @@ router('site-modify',function(){ require('./controller/site/modify.php'); });
 
 router('site-constant-active',function(){ require('./controller/site/constant-active.php'); });
 router('site-constant-node',function(){ require('./controller/site/constant-node.php'); });
+router('site-constant-detail',function(){ require('./controller/site/constant-detail.php'); });
+
+router('server-add',function(){ require('./controller/server/add.php'); });
+router('server-snmp-check',function(){ require('./controller/server/snmp-check.php'); });
+router('server-list',function(){ require('./controller/server/list.php'); });
+
+
 //require('./controller/user/reg.php');
 //require('./controller/user/mail.php');
 //require('./controller/user/mail-verify.php');
@@ -111,7 +118,7 @@ router('test2',function(){
 });
 
 router('test3', function(){
-	//echo '<form method="POST" action="./notice-max"><!--<input name="max" value="11a"/>--><input type="submit"/></form>';
+	echo '<form method="POST" action="./server-add"><input name="ip" value=""/><input type="submit"/></form>';
 });
 
 /*================路由表<结束>========================*/

@@ -17,6 +17,8 @@
 	if(strcasecmp($enPass, $info['passwd']) !== 0) json(false, '邮箱或密码错误，登录失败');
 
 	$user->login($info['user_id']);
+
+	setcookie('mail', $mail);
 	json(true, '登录成功');
 
 

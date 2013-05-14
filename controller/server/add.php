@@ -1,29 +1,28 @@
 <?php
 
-//router('server-add',function(){
+
 
 	$user = model('user');
 	$user_id = $user->sessionCheck(function(){
 		json(false, '未登录');
 	});
 
-	$domain = filter('domain', '/^[a-zA-z0-9\-\.]+\.[a-zA-z0-9\-\.]+$/', '域名格式错误');
-	$path = filter('path', '/^\/.{0,255}+$/', '监控路径格式错误');
-	$custom_name = filter('name', '/^.{0,255}$/', '别名格式错误');
-	$port = filter('port', '/^[0-9]{1,5}$/', '端口格式错误');
+	$ip =  filter('ip', '/^([0-9]{1,3}.){3}[0-9]{1,3}$/', 'IP格式错误');
+	$custom_name = filter('name', '/^.{0,255}$/', '别名格式错误', '');
+	$period = filter('period', '/^[0-9]{1,5}$/', '间隔时间格式错误', 60);
+	if($period < 60) $period = 60;
+	//$ip = '61.175.163.196';
 
-	/*$domainModel = model('domain');
-	$constantModel = model('constant');
-	$info = $domainModel->get($domain, 'domain');
+	$serverModel = model('server');
+	$info = $serverModel->get($ip, 'ip');
 
-	if(!empty($info)) json(false, '该域名已经被添加');
+	if(!empty($info)) json(false, '该IP已经被添加');
 
-	$result = $domainModel->add($domain, $user_id, $custom_name);
+	$result = $serverModel->add($ip, $user_id, $custom_name, $period);
 	if($result == false) json(false, '添加失败');
-	$constantModel->add($result);
-	$constantModel->update($result, array('path' => $path));
-	json(true, '添加成功');*/
+	json(true, '添加成功');
 
-//});
+
+
 
 ?>

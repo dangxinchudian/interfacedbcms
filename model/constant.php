@@ -4,6 +4,32 @@
 
 class constant extends model{
 
+	public function log_data($site_id, $time_unit, $start_time, $stop_time, $node = -1){
+		$start_time = date('Y-m-d H:i:s', $start_time);
+		$stop_time = date('Y-m-d H:i:s', $stop_time);
+		$typeArray = array(
+			'year' => '%Y',
+			'month' => '%Y-%m',
+			'day' => '%Y-%m-%d'
+		);
+		if($node >= 0) $node = " AND constant_node_id = '{$node}' ";
+		else $node = '';
+		$sql = "SELECT count(id) AS log_count,date_format(time,'{$typeArray[$time_unit]}') AS group_time FROM mosite_{$site_id}.constant_log WHERE time >= '{$start_time}' AND time <= '{$stop_time}' {$node} GROUP BY group_time ORDER BY group_time ASC";
+		$result_total = $this->db()->query($sql, 'array');
+		$sql = "SELECT count(id) AS log_count,date_format(time,'{$typeArray[$time_unit]}') AS group_time FROM mosite_{$site_id}.constant_log WHERE time >= '{$start_time}' AND time <= '{$stop_time}' AND status = '200' {$node} GROUP BY group_time ORDER BY group_time ASC";
+		$result_avail = $this->db()->query($sql, 'array');
+		$result = array();
+		foreach ($result_total as $key => $value) {
+			$result[$value['group_time']] = $value;
+			$result[$value['group_time']]['avail_count'] = 0;
+		}
+		foreach ($result_avail as $key => $value) $result[$value['group_time']]['avail_count'] = $value['log_count'];
+		foreach ($result as $key => $value) {
+			$result[$key]['available'] = round($value['avail_count'] / $value['log_count'] * 100, 2);
+		}
+		return $result;
+	}
+
 	public function log_work_time($site_id, $start_time, $stop_time, $period, $node = 0){		//work_time
 		$start_time = date('Y-m-d H:i:s', $start_time);
 		$stop_time = date('Y-m-d H:i:s', $stop_time);

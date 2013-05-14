@@ -1,7 +1,7 @@
 <?php
 
 class database {
-	private $dbHost = 'demo.secon.me';
+	private $dbHost = '115.28.34.205';
 	private $dbName = 'monitor';
 	private $dbUser = 'root';
 	private $dbPass = 'zooboa.com';
