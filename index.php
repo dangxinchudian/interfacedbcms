@@ -97,7 +97,7 @@ router('site-constant-get',function(){ require('./controller/site/constant-get.p
 router('server-add',function(){ require('./controller/server/add.php'); });
 router('server-snmp-check',function(){ require('./controller/server/snmp-check.php'); });
 router('server-list',function(){ require('./controller/server/list.php'); });
-
+router('server-modify',function(){ require('./controller/server/modify.php'); });
 
 //require('./controller/user/reg.php');
 //require('./controller/user/mail.php');
