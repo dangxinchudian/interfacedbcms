@@ -60,6 +60,7 @@ class constant extends model{
 		$sql = "SELECT count(id) FROM mosite_{$site_id}.constant_log WHERE time >= '{$start_time}' AND time <= '{$stop_time}' {$node}";
 		$result = $this->db()->query($sql, 'row');
 		$total_count = $result['count(id)'];
+		if($total_count == 0) return 0;
 		return round($avail_count / $total_count * 100, 2);
 	}
 
