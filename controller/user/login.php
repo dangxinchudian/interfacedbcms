@@ -18,7 +18,7 @@
 
 	$user->login($info['user_id']);
 
-	setcookie('mail', $mail);
+	setcookie('mail', $mail, time() + 3600 * 24 * 30);
 	json(true, '登录成功');
 
 
