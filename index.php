@@ -99,8 +99,8 @@ router('server-snmp-check',function(){ require('./controller/server/snmp-check.p
 router('server-list',function(){ require('./controller/server/list.php'); });
 router('server-modify',function(){ require('./controller/server/modify.php'); });
 router('server-remove',function(){ require('./controller/server/remove.php'); });
-
-
+router('server-device-add',function(){ require('./controller/server/device-add.php'); });
+router('server-get',function(){ require('./controller/server/get.php'); });
 
 router('test',function(){
 	echo '<form method="POST" action="./user-login"><input name="mail" value="zje2008@qq.com"/><input name="pass" value="b123456"/><input type="submit"/></form>';
