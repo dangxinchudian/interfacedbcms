@@ -1,7 +1,5 @@
 <?php
 
-
-
 	$user = model('user');
 	$user_id = $user->sessionCheck(function(){
 		json(false, '未登录');
@@ -20,7 +18,7 @@
 
 	$result = $serverModel->add($ip, $user_id, $custom_name, $period);
 	if($result == false) json(false, '添加失败');
-	json(true, '添加成功');
+	json(true, $result);
 
 
 
