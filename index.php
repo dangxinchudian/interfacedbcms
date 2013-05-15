@@ -98,6 +98,7 @@ router('site-action-month-list',function(){ require('./controller/aws/list.php')
 router('site-aws-action-pages',function(){ require('./controller/aws/pages.php'); });
 //router('site-aws-action-monthly',function(){ require('./controller/aws/monthly.php'); });
 router('site-aws-action-daily',function(){ require('./controller/aws/daily.php'); });
+router('site-aws-action-robot',function(){ require('./controller/aws/robot.php'); });
 
 
 
