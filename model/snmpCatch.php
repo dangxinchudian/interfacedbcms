@@ -34,6 +34,29 @@ class snmpCatch {
 		return $this->snmp('HOST-RESOURCES-MIB::hrSystemDate.0', true);
 	}
 
+	public function disk(){
+		$disk = array();
+		$result = $this->snmp('1.3.6.1.2.1.25.2');
+		if(!$result) return false;
+		foreach($result as $key => $value){
+			if($label = strstr($key , 'hrStorageDescr')){
+				$label = explode('.', $label);
+				$label = $label[1];
+				if(($name = strstr($value, '/')) || strstr($value, '\\')){
+					if($name === false) $name = $this->format($value);
+					if(($size = $this->format($result["HOST-RESOURCES-MIB::hrStorageSize.{$label}"])) != 0){
+						$disk[] = array(
+							'name' => $name,
+							'total' => $size,
+							'used' => $this->format($result["HOST-RESOURCES-MIB::hrStorageUsed.{$label}"]) 
+						);
+					}
+				}
+			}
+		}
+		return $disk;
+	}
+
 	private function snmp($value, $format = false){
 		if($format) return @$this->format(snmprealwalk($this->ip, $this->community, $value));
 		return @snmprealwalk($this->ip, $this->community, $value);

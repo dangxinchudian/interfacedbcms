@@ -27,9 +27,16 @@
 
 	$awsModel = model('aws');
 	//$total = 1;
-	$result= $awsModel->visitor($info['site_id'], $start, $limit);
+	$result = $awsModel->visitor($info['site_id'], $start, $limit);
 	$result['limit'] = $limit;
 	$result['page'] = $page;
+	foreach ($result['list'] as $key => $value) {
+		foreach ($value as $subkey => $subvalue) {
+			if($subvalue == 'None'){
+				$result['list'][$key][$subkey] = '未知';
+			}
+		}
+	}
 
 	json(true, $result);
 
