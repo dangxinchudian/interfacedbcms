@@ -94,6 +94,8 @@ router('site-constant-node',function(){ require('./controller/site/constant-node
 router('site-constant-detail',function(){ require('./controller/site/constant-detail.php'); });
 router('site-constant-get',function(){ require('./controller/site/constant-get.php'); });
 
+router('site-action-month-list',function(){ require('./controller/aws/list.php'); });
+
 router('server-add',function(){ require('./controller/server/add.php'); });
 router('server-snmp-check',function(){ require('./controller/server/snmp-check.php'); });
 router('server-list',function(){ require('./controller/server/list.php'); });

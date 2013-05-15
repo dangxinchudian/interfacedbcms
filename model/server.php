@@ -67,6 +67,20 @@ class server extends model{
 		return $result['count(server_id)'];
 	}
 
+	public function setDevice($deviceArray){		//设备名数组-注册设备
+
+	}
+
+	public function item($item_id = false){
+		if($item_id){
+			$sql = "SELECT * FROM server_item WHERE server_item_id = '{$item_id}' AND remove = 0";
+			return $this->db()->query($sql, 'row');
+		}else{
+			$sql = "SELECT * FROM server_item WHERE remove = 0";
+			return $this->db()->query($sql, 'array');
+		}
+	}
+
 	public function partitionSql(){		//生成分区表的sql语句
 		$sql = 'PARTITION BY RANGE (TO_DAYS (time))(';
 		$year = date('Y');
@@ -96,13 +110,16 @@ class server extends model{
 		return $sql;
 	}
 
-	public function itemSql($item, $device_id){
+	public function itemSql($item){
 		$array = array(
-			'cpu' => "CREATE TABLE IF NOT EXISTS `cpu_{$device_id}_log` ( `id` char(36) NOT NULL, `used` tinyint(3) unsigned NOT NULL COMMENT '使用百分比', `time` datetime NOT NULL );",
-			'memory' => "CREATE TABLE IF NOT EXISTS `memory_{$device_id}_log` ( `id` char(36) NOT NULL, `used_amount` int(10) unsigned NOT NULL COMMENT '使用量', `total_amount` int(10) unsigned NOT NULL COMMENT '总量', `time` datetime NOT NULL );",
-			'processcount' => "CREATE TABLE IF NOT EXISTS `processcount_{$device_id}_log` ( `id` char(36) NOT NULL, `amount` int(10) unsigned NOT NULL COMMENT '数量', `time` datetime NOT NULL );",
-			'disk' => "CREATE TABLE IF NOT EXISTS `disk_{$device_id}_log` ( `id` char(36) NOT NULL, `used_amount` int(10) unsigned NOT NULL COMMENT '使用量', `total_amount` int(10) unsigned NOT NULL COMMENT '总量', `time` datetime NOT NULL );",
+			'cpu' => "CREATE TABLE IF NOT EXISTS `cpu_log` ( `id` char(36) NOT NULL, `used` tinyint(3) unsigned NOT NULL COMMENT '使用百分比', `device_id` int(10) unsigned NOT NULL COMMENT '设备ID', `time` datetime NOT NULL );",
+			'memory' => "CREATE TABLE IF NOT EXISTS `memory_log` ( `id` char(36) NOT NULL, `used_amount` int(10) unsigned NOT NULL COMMENT '使用量', `total_amount` int(10) unsigned NOT NULL COMMENT '总量', `device_id` int(10) unsigned NOT NULL COMMENT '设备ID', `time` datetime NOT NULL );",
+			'processcount' => "CREATE TABLE IF NOT EXISTS `processcount_log` ( `id` char(36) NOT NULL, `amount` int(10) unsigned NOT NULL COMMENT '数量', `time` datetime NOT NULL );",
+			'disk' => "CREATE TABLE IF NOT EXISTS `disk_log` ( `id` char(36) NOT NULL, `used_amount` int(10) unsigned NOT NULL COMMENT '使用量', `total_amount` int(10) unsigned NOT NULL COMMENT '总量', `device_id` int(10) unsigned NOT NULL COMMENT '设备ID', `time` datetime NOT NULL );",
+			'network' => "CREATE TABLE IF NOT EXISTS `network_log` ( `id` char(36) NOT NULL, `in` int(10) unsigned NOT NULL COMMENT '流入流量', `out` int(10) unsigned NOT NULL COMMENT '流出流量', `device_id` int(10) unsigned NOT NULL COMMENT '设备ID', `time` datetime NOT NULL );",
 		);
+		if(!isset($array[$item])) return false;
+		return $array[$item];
 	}
 
 
