@@ -8,7 +8,17 @@ class aws extends model{
 		$table = $this->checkTable("molog_{$site_id}", 'general');
 		if(!$table) return array();
 		$sql = "SELECT * FROM molog_{$site_id}.general WHERE general.year_month = '{$month}'";
-		$result = $this->db()->query($sql, 'row');
+		return $this->db()->query($sql, 'row');
+	}
+
+	public function pages($site_id, $start, $limit){
+		$table = $this->checkTable("molog_{$site_id}", 'pages');
+		if(!$table) return array();
+		$sql = "SELECT * FROM molog_{$site_id}.pages ORDER BY pages DESC LIMIT {$start},{$limit}";
+		$result['list'] = $this->db()->query($sql, 'array');
+		$sql = "SELECT count(id) FROM molog_{$site_id}.pages ";
+		$dbResult = $this->db()->query($sql, 'row');
+		$result['total'] = $dbResult['count(id)'];
 		return $result;
 	}
 	
