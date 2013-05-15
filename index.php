@@ -99,8 +99,7 @@ router('site-aws-action-pages',function(){ require('./controller/aws/pages.php')
 //router('site-aws-action-monthly',function(){ require('./controller/aws/monthly.php'); });
 router('site-aws-action-daily',function(){ require('./controller/aws/daily.php'); });
 router('site-aws-action-robot',function(){ require('./controller/aws/robot.php'); });
-
-
+router('site-aws-action-referer',function(){ require('./controller/aws/referer.php'); });
 
 router('server-add',function(){ require('./controller/server/add.php'); });
 router('server-snmp-check',function(){ require('./controller/server/snmp-check.php'); });
