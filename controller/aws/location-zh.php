@@ -5,8 +5,8 @@
 		json(false, '未登录');
 	});
 
-	//$site_id = filter('site_id', '/^[0-9]{1,9}$/', 'siteID格式错误');
-	$site_id = 0;
+	$site_id = filter('site_id', '/^[0-9]{1,9}$/', 'siteID格式错误');
+	//$site_id = 0;
 
 	$siteModel = model('site');
 	if($site_id == 0) $info = $siteModel->get($user_id, 'user_id');
