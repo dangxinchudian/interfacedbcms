@@ -11,6 +11,15 @@ class aws extends model{
 		return $this->db()->query($sql, 'row');
 	}
 
+	public function daily($site_id, $start_time, $stop_time){
+		$table = $this->checkTable("molog_{$site_id}", 'daily');
+		if(!$table) return array();
+		$start_time = date('Ymd', $start_time);
+		$stop_time = date('Ymd', $stop_time);
+		$sql = "SELECT * FROM molog_{$site_id}.daily WHERE daily.day >= {$start_time} AND daily.day <= {$stop_time}";
+		return $this->db()->query($sql, 'array');
+	}
+
 	public function pages($site_id, $start, $limit){
 		$table = $this->checkTable("molog_{$site_id}", 'pages');
 		if(!$table) return array();
