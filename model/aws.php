@@ -81,6 +81,13 @@ class aws extends model{
 		$sql = "SELECT country_code, country_desc, sum(pages) as total_pages, sum(hits) as total_hits, sum(bandwidth) as total_bandwidth FROM molog_{$site_id}.visitors GROUP BY country_code ORDER BY total_hits DESC";
 		return $this->db()->query($sql, 'array');
 	}
+
+	public function locationZh($site_id){
+		$table = $this->checkTable("molog_{$site_id}", 'visitors');
+		if(!$table) return array();
+		$sql = "SELECT region, sum(pages) as total_pages, sum(hits) as total_hits, sum(bandwidth) as total_bandwidth FROM molog_{$site_id}.visitors WHERE country_code = 'CN' GROUP BY region ORDER BY total_hits DESC";
+		return $this->db()->query($sql, 'array');
+	}
 	
 	public function checkTable($database, $table){
 		$sql = "SELECT TABLE_NAME from INFORMATION_SCHEMA.TABLES where TABLE_SCHEMA='{$database}' and TABLE_NAME='{$table}'";

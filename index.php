@@ -103,6 +103,8 @@ router('site-aws-action-referer',function(){ require('./controller/aws/referer.p
 router('site-aws-action-error404',function(){ require('./controller/aws/error404.php'); });
 router('site-aws-action-visitor',function(){ require('./controller/aws/visitor.php'); });
 router('site-aws-action-location',function(){ require('./controller/aws/location.php'); });
+router('site-aws-action-location-zh',function(){ require('./controller/aws/location-zh.php'); });
+
 
 router('server-add',function(){ require('./controller/server/add.php'); });
 router('server-snmp-check',function(){ require('./controller/server/snmp-check.php'); });
