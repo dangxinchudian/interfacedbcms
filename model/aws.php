@@ -74,6 +74,14 @@ class aws extends model{
 		$result['total'] = $dbResult['count(id)'];
 		return $result;
 	}
+
+	public function location($site_id){
+		$table = $this->checkTable("molog_{$site_id}", 'visitors');
+		if(!$table) return array();
+		$sql = "SELECT country_code, country_desc, sum(pages) as total_pages, sum(hits) as total_hits, sum(bandwidth) as total_bandwidth FROM molog_{$site_id}.visitors GROUP BY country_code ORDER BY total_hits DESC";
+		echo $sql;
+		return $this->db()->query($sql, 'array');
+	}
 	
 	public function checkTable($database, $table){
 		$sql = "SELECT TABLE_NAME from INFORMATION_SCHEMA.TABLES where TABLE_SCHEMA='{$database}' and TABLE_NAME='{$table}'";

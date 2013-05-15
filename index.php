@@ -102,7 +102,7 @@ router('site-aws-action-robot',function(){ require('./controller/aws/robot.php')
 router('site-aws-action-referer',function(){ require('./controller/aws/referer.php'); });
 router('site-aws-action-error404',function(){ require('./controller/aws/error404.php'); });
 router('site-aws-action-visitor',function(){ require('./controller/aws/visitor.php'); });
-
+router('site-aws-action-location',function(){ require('./controller/aws/location.php'); });
 
 router('server-add',function(){ require('./controller/server/add.php'); });
 router('server-snmp-check',function(){ require('./controller/server/snmp-check.php'); });
