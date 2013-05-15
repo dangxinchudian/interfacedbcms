@@ -29,7 +29,7 @@
 		);
 	}
 	//print_r($return);
-	json(true, $result);
+	json(true, $return);
 
 
 ?>
