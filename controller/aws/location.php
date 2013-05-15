@@ -22,7 +22,6 @@
 
 	$return = array();
 	foreach ($result as $key => $value) {
-		if()
 		$return[$key] = array(
 			'id' => $value['country_code'],
 			'value' => $value['total_hits'],
