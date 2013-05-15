@@ -27,7 +27,7 @@
 
 	$awsModel = model('aws');
 	//$total = 1;
-	$result= $awsModel->pages($info['site_id'], $start, $limit);
+	$result = $awsModel->pages($info['site_id'], $start, $limit);
 	$result['limit'] = $limit;
 	$result['page'] = $page;
 
