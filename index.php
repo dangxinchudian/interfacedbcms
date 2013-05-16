@@ -119,6 +119,7 @@ router('server-item-init',function(){ require('./controller/server/item-init.php
 router('server-item-list',function(){ require('./controller/server/item-list.php'); });
 router('server-get',function(){ require('./controller/server/get.php'); });
 router('server-watch-get',function(){ require('./controller/server/watch-get.php'); });
+router('server-snmp-catch:([0-9]{1,9})',function($matches){ require('./controller/server/snmp-catch.php'); });
 
 router('test',function(){
 	echo '<form method="POST" action="./user-login"><input name="mail" value="zje2008@qq.com"/><input name="pass" value="b123456"/><input type="submit"/></form>';
