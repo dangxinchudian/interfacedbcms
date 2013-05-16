@@ -32,7 +32,7 @@
 	$data = array();
 	//date&data complete
 	if($time_unit == 'day'){
-		for($i = 0 ; $i< ($stop_time - $start_time) / (3600*24); $i++){
+		for($i = 0 ; $i<= ($stop_time - $start_time) / (3600*24); $i++){
 			$data[date('Y-m-d', $start_time + 3600 * 24 * $i)] = 0;
 		}
 	}elseif($time_unit == 'month'){
