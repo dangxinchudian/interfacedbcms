@@ -20,7 +20,6 @@
 	if($info['user_id'] != $user_id) json(false, '不允许操作他人站点');
 
 	$serverModel = model('server');
-	$ip = '0.0.0.0';
 
 	if($server_id <= 0){
 		$ip = gethostbyname($info['domain']);
@@ -46,11 +45,10 @@
 		if(empty($server)) json(false, '服务器不存在');
 		if($server['remove'] > 0) json(false, '服务器已经被移除');
 		if($server['user_id'] != $user_id) json(false, '不允许操作他人服务器');
-		$ip = $server['ip'];
 	}
 
 	$result = $siteModel->update($site_id, array('server_id' => $server_id));
-	if($result > 0) json(true, $ip);
+	if($result > 0) json(true, '设置服务器成功');
 	else json(false, '未进行更改');
 
 

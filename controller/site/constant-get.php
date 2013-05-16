@@ -28,6 +28,11 @@
 		$info['available'] = $constantModel->available($info['site_id'], $start_time, $stop_time);
 	}
 
+	if($info['server_id'] != 0){
+		$serverModel = model('server');
+		$info['server'] = $serverModel->get($info['server_id']);
+	}
+
 	json(true, $info);
 
 
