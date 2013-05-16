@@ -26,11 +26,13 @@
 
 	$result = array(
 		0 => array(),
-		1 => array()
+		1 => array(),
+		2 => array()
 	);
 	foreach ($info as $key => $value) {
 		$result[0][] = $value['day'];
 		$result[1][] = $value['hits'];
+		$result[2][] = 0;
 	}
 
 	json(true, $result);

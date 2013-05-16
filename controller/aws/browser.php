@@ -6,16 +6,9 @@
 	});
 
 	$site_id = filter('site_id', '/^[0-9]{1,9}$/', 'siteID格式错误');
-	$page = filter('page', '/^[0-9]{1,9}$/', '页码格式错误');
-	$limit = filter('limit', '/^[0-9]{1,9}$/', '偏移格式错误');
+	
 
 	// $site_id = 0;
-	// $page = 1;
-	// $limit = 10;
-
-	if($limit <= 0) $limit = 1;
-	if($page < 1) $page = 1;
-	$start = ($page - 1) * $limit;
 
 	$siteModel = model('site');
 	if($site_id == 0) $info = $siteModel->get($user_id, 'user_id');
@@ -27,11 +20,19 @@
 
 	$awsModel = model('aws');
 	//$total = 1;
-	$result = $awsModel->pages($info['site_id'], $start, $limit);
-	$result['limit'] = $limit;
-	$result['page'] = $page;
-
-	json(true, $result);
+	$result = $awsModel->browser($info['site_id'], date('Ym'));
+	$return = array();
+	foreach ($result as $key => $value) {
+		$name = preg_replace('/[0-9\.]/', '', $value['name']);
+		//$result[$key]['a'] = preg_replace('/[0-9\.]/', '', $value['name']);
+		if(isset($return[$name])){
+			$return[$name] = $return[$name] + $value['hits'];
+		}else{
+			$return[$name] = $value['hits'];
+			//echo $name;
+		}
+	}
+	json(true, $return);
 
 
 ?>

@@ -42,6 +42,13 @@ class aws extends model{
 		return $result;
 	}
 
+	public function browser($site_id, $month){
+		$table = $this->checkTable("molog_{$site_id}", 'browser');
+		if(!$table) return array();
+		$sql = "SELECT * FROM molog_{$site_id}.browser ORDER BY hits DESC";
+		return $this->db()->query($sql, 'array');
+	}
+
 	public function referer($site_id, $start, $limit){
 		$table = $this->checkTable("molog_{$site_id}", 'pageref');
 		if(!$table) return array();
