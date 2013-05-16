@@ -88,6 +88,16 @@ class server extends model{
 		}
 	}
 
+	public function getDevice($value, $type = 'device_id'){
+		if($type == 'device_id'){
+			$sql = "SELECT * FROM server_device WHERE server_device_id = '{$value}'";
+			return $this->db()->query($sql, 'row');
+		}else{
+			$sql = "SELECT * FROM server_device WHERE server_hardware_id = '{$value}' AND remove = 0";
+			return $this->db()->query($sql, 'array');
+		}
+	}
+
 	public function item($item_id = false){
 		if($item_id){
 			$sql = "SELECT * FROM server_item WHERE server_item_id = '{$item_id}' AND remove = 0";
@@ -185,8 +195,12 @@ class server extends model{
 		}
 	}
 
-	public function selectWatch($server_id, $item_id){
-		$sql = "SELECT * FROM server_watch WHERE server_item_id = '{$item_id}' AND server_id = '{$server_id}' AND remove = 0";
+	public function selectWatch($server_id, $item_id = false){
+		if($item_id === false){
+			$sql = "SELECT * FROM server_watch WHERE server_watch_id = '{$server_id}'";
+		}else{
+			$sql = "SELECT * FROM server_watch WHERE server_item_id = '{$item_id}' AND server_id = '{$server_id}' AND remove = 0";
+		}
 		return $this->db()->query($sql, 'row');		
 	}
 	/*public function itemSql($item){
