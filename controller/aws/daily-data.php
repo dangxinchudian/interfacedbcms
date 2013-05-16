@@ -24,16 +24,20 @@
 	$awsModel = model('aws');
 	$info = $awsModel->daily($info['site_id'], $start_time, $stop_time);
 
-	$result = array(
-		0 => array(),
-		1 => array(),
-		2 => array()
-	);
-	foreach ($info as $key => $value) {
-		$result[0][] = $value['day'];
-		$result[1][] = (int)$value['hits'];
-		$result[2][] = 0;
+	$http = array();
+	$attack = array();
+	for($i = 0 ; $i< ($stop_time - $start_time) / (3600*24); $i++){
+		$http[date('Ym', $start_time + 3600 * 24 * $i)] = 0;
+		$attack[date('Ym', $start_time + 3600 * 24 * $i)] = 0;
 	}
+	foreach ($info as $key => $value) {
+		$http[$value['day']] = (int)$value['hits'];
+	}
+	$result = array(
+		0 => array_keys($http),
+		1 => array_values($http),
+		2 => array_values($attack)
+	);
 
 	json(true, $result);
 
