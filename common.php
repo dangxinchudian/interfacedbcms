@@ -41,6 +41,14 @@ function is_windows(){
 	return true;
 }
 
+function str_compress($result){
+	return preg_replace('/[^\/:0-9A-Za-z\\\\]/','', $result);
+}
+
+function str2utf8($keyword){
+	return mb_convert_encoding($keyword, 'UTF-8', 'GBK,GB2312');
+}
+
 function jencode($value){
 	if(empty($value)) return false;
 	return base64_encode(gzcompress(json_encode($value)));

@@ -87,6 +87,7 @@ router('notice-max',function(){ require('./controller/notice/max.php'); });
 router('site-add',function(){ require('./controller/site/add.php'); });
 router('site-remove',function(){ require('./controller/site/remove.php'); });
 router('site-modify',function(){ require('./controller/site/modify.php'); });
+router('site-server',function(){ require('./controller/site/server.php'); });
 
 router('site-constant-list',function(){ require('./controller/site/constant-list.php'); });
 router('site-constant-active',function(){ require('./controller/site/constant-active.php'); });
@@ -98,6 +99,7 @@ router('site-action-month-list',function(){ require('./controller/aws/list.php')
 router('site-aws-action-pages',function(){ require('./controller/aws/pages.php'); });
 //router('site-aws-action-monthly',function(){ require('./controller/aws/monthly.php'); });
 router('site-aws-action-daily',function(){ require('./controller/aws/daily.php'); });
+router('site-aws-action-daily-data',function(){ require('./controller/aws/daily-data.php'); });
 router('site-aws-action-robot',function(){ require('./controller/aws/robot.php'); });
 router('site-aws-action-referer',function(){ require('./controller/aws/referer.php'); });
 router('site-aws-action-error404',function(){ require('./controller/aws/error404.php'); });
@@ -111,7 +113,7 @@ router('server-snmp-check',function(){ require('./controller/server/snmp-check.p
 router('server-list',function(){ require('./controller/server/list.php'); });
 router('server-modify',function(){ require('./controller/server/modify.php'); });
 router('server-remove',function(){ require('./controller/server/remove.php'); });
-router('server-device-add',function(){ require('./controller/server/device-add.php'); });
+router('server-item-init',function(){ require('./controller/server/item-init.php'); });
 router('server-get',function(){ require('./controller/server/get.php'); });
 
 router('test',function(){

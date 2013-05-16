@@ -67,8 +67,25 @@ class server extends model{
 		return $result['count(server_id)'];
 	}
 
-	public function setDevice($deviceArray){		//设备名数组-注册设备
-
+	public function setDevice($user_id, $server_id, $hardware_id, $deviceArray){		//设备数组-注册设备
+		$this->db()->update('server_device', array('remove' => 1), " server_id = '{$server_id}' AND server_hardware_id = '{$hardware_id}' ");		//remove all
+		//$result = $this->db()->query($sql, 'array');
+		foreach ($deviceArray as $key => $value) {
+			$sql = "SELECT * FROM server_device WHERE hash = '{$value['hash']}' AND server_id = '{$server_id}' AND server_hardware_id = '{$hardware_id}'";
+			$result = $this->db()->query($sql, 'row');
+			if(empty($result)){
+				$insertArray = array(
+					'server_id' => $server_id,
+					'user_id' => $user_id,
+					'server_hardware_id' => $hardware_id,
+					'hash' => $value['hash'],
+					'value' => $value['name']
+				);
+				$this->db()->insert('server_device', $insertArray);
+			}else{
+				$this->db()->update('server_device', array('remove' => 0), " server_id = '{$server_id}' AND server_hardware_id = '{$hardware_id}' AND hash = '{$value['hash']}'");	
+			}
+		}
 	}
 
 	public function item($item_id = false){
@@ -84,6 +101,13 @@ class server extends model{
 	public function hardware($hardware_id){
 		$sql = "SELECT * FROM server_hardware WHERE server_hardware_id = '{$hardware_id}' ";
 		return $this->db()->query($sql, 'row');		
+	}
+
+	public function checkTable($database, $table){
+		$sql = "SELECT TABLE_NAME from INFORMATION_SCHEMA.TABLES where TABLE_SCHEMA='{$database}' and TABLE_NAME='{$table}'";
+		$result = $this->db()->query($sql, 'row');
+		if(empty($result)) return false;
+		return true;
 	}
 
 	public function partitionSql(){		//生成分区表的sql语句
@@ -115,6 +139,51 @@ class server extends model{
 		return $sql;
 	}
 
+	public function device_hash($server_id, $hardware_id, $name){
+		return md5('seconme@'.$server_id.$hardware_id.$name);
+	}
+
+	public function addWatch($server_id, $item_id, $tablename, $user_id){
+		$table = $this->checkTable("moserver_{$server_id}", $tablename);
+		if(!$table){
+			$sql = "SELECT * FROM server_item_field WHERE server_item_id = '{$item_id}'";
+			$fields = $this->db()->query($sql, 'array');
+			$fieldsql = array();
+			foreach ($fields as $key => $value) {
+				if(!empty($value['var_length'])) $length = "({$value['var_length']})";
+				else $length = '';
+				$fsql = "`{$value['var_name']}` {$value['var_type']}{$length} {$value['var_signed']} {$value['var_null']}";
+				if(!empty($value['var_default'])) $fsql .= " DEFAULT '{$value['var_default']}' ";
+				if(!empty($value['var_comment'])) $fsql .= " COMMENT '{$value['var_comment']}' ";
+				$fieldsql[] = $fsql;
+			}
+			$tablesql = "USE moserver_{$server_id}; CREATE TABLE IF NOT EXISTS `{$tablename}` ( ";
+			$tablesql .= implode(',', $fieldsql);
+			$tablesql .= ') ENGINE=ARCHIVE DEFAULT CHARSET=utf8 ';
+			$tablesql .= $this->partitionSql();
+			$this->db()->query($tablesql, 'exec');
+		}
+		$sql = "SELECT * FROM server_watch WHERE server_item_id = '{$item_id}' AND server_id = '{$server_id}' AND remove = 0";
+		$watch = $this->db()->query($sql, 'row');
+		if(empty($watch)){
+			$insertArray = array(
+				'server_id' => $server_id,
+				'user_id' => $user_id,
+				'server_item_id' => $item_id,
+				'creat_time' => time(),
+				'update_time' => time()
+			);
+			$this->db()->insert('server_watch', $insertArray);
+			return $this->db()->insertId();			
+		}else{
+			$updateArray = array(
+				'update_time' => time()
+			);
+			$result = $this->db()->update('server_watch', $updateArray, " server_watch_id = '{$watch['server_watch_id']}' ");
+			if($result > 0) return $watch['server_watch_id'];
+			else return false;
+		}
+	}
 	/*public function itemSql($item){
 		$array = array(
 			'cpu' => "CREATE TABLE IF NOT EXISTS `cpu_log` ( `id` char(36) NOT NULL, `used` tinyint(3) unsigned NOT NULL COMMENT '使用百分比', `device_id` int(10) unsigned NOT NULL COMMENT '设备ID', `time` datetime NOT NULL );",
