@@ -31,7 +31,7 @@
 	);
 	foreach ($info as $key => $value) {
 		$result[0][] = $value['day'];
-		$result[1][] = $value['hits'];
+		$result[1][] = (int)$value['hits'];
 		$result[2][] = 0;
 	}
 
