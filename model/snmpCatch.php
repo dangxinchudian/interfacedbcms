@@ -123,7 +123,7 @@ class snmpCatch {
 	}
 
 	public function memory_total(){
-		return array_shift($this->snmp('1.3.6.1.2.1.25.2.2.0'));
+		return $this->format(array_shift($this->snmp('1.3.6.1.2.1.25.2.2.0')));
 	}
 
 	private function snmp($value, $format = false){

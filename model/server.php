@@ -172,6 +172,7 @@ class server extends model{
 			$tablesql .= ') ENGINE=ARCHIVE DEFAULT CHARSET=utf8 ';
 			$tablesql .= $this->partitionSql();
 			$this->db()->query($tablesql, 'exec');
+			$this->db()->query("USE monitor;", 'exec');
 		}
 		$sql = "SELECT * FROM server_watch WHERE server_item_id = '{$item_id}' AND server_id = '{$server_id}' AND remove = 0";
 		$watch = $this->db()->query($sql, 'row');
@@ -202,6 +203,24 @@ class server extends model{
 			$sql = "SELECT * FROM server_watch WHERE server_item_id = '{$item_id}' AND server_id = '{$server_id}' AND remove = 0";
 		}
 		return $this->db()->query($sql, 'row');		
+	}
+
+	public function lastWatch($server_id, $table, $device_id = array()){
+		$start_time = date('Y-m-d H:i:s', strtotime('-2 month'));
+		$stop_time = date('Y-m-d H:i:s');
+		if(empty($device_id)){
+			$sql = "SELECT * FROM moserver_{$server_id}.{$table} WHERE time > '{$start_time}' AND time < '{$stop_time}' ORDER BY time DESC LIMIT 0,1";
+			return $this->db()->query($sql, 'row');	
+		}else{
+			$result = array();
+			foreach ($device_id as $key => $value) {
+				$sql = "SELECT * FROM moserver_{$server_id}.{$table} WHERE time > '{$start_time}' AND time < '{$stop_time}' AND device_id = '{$value}' ORDER BY time DESC LIMIT 0,1";
+				//echo $sql;
+				$row = $this->db()->query($sql, 'row');
+				if(!empty($row)) $result[] = $row;
+			}
+			return $result;
+		}
 	}
 	/*public function itemSql($item){
 		$array = array(

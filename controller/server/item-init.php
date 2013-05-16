@@ -5,11 +5,10 @@
 		json(false, '未登录');
 	});
 
-	$item_id = filter('item_id', '/^[0-9]{1,9}$/', 'itemID格式错误');
-	$server_id = filter('server_id', '/^[0-9]{1,9}$/', 'serverID格式错误');
-	//$item_id = 1;
-	//$server_id = 4;
-	//$server_id = 1;
+	// $item_id = filter('item_id', '/^[0-9]{1,9}$/', 'itemID格式错误');
+	// $server_id = filter('server_id', '/^[0-9]{1,9}$/', 'serverID格式错误');
+	$item_id = 2;
+	$server_id = 4;
 
 	$serverModel = model('server');
 	$snmpCatch = model('snmpCatch');

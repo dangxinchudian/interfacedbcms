@@ -48,18 +48,79 @@ switch ($item['table_name']) {
 		break;
 
 	case 'network_log':
-		# code...
+		$result = $snmp->network();
+		if(!$result) json(false, 'snmp error!');
+		$snmpDevice = array();
+		foreach ($result as $key => $value) {
+			$snmpDevice[$serverModel->device_hash($watch['server_id'], $item['server_hardware_id'], $value['descr'].$value['physAddress'])] = $value;
+		}
+		$snmpDevice = array_intersect_key($snmpDevice, $deviceList);
+		$deviceArray = array();
+		foreach ($snmpDevice as $key => $value){
+			$deviceArray[$deviceList[$key]['server_device_id']] = $value;
+			$deviceArray[$deviceList[$key]['server_device_id']]['last'] = array();
+		}
+
+		$last = $serverModel->lastWatch($watch['server_id'], $item['table_name'], array_keys($deviceArray));
+		foreach ($last as $key => $value) $deviceArray[$value['device_id']]['last'] = $value;
+
+		// print_r($deviceArray);
+		$sql = '';
+		$time = date('Y-m-d H:i:s');
+		foreach ($deviceArray as $key => $value) {
+			if(empty($value['last'])){
+				$sql .= " INSERT INTO {$table} (id, in_total, out_total, device_id, time) VALUES (uuid(), '{$value['inOctets']}', '{$value['outOctets']}', '{$key}', '{$time}'); ";
+			}else{
+				$delta = time() - strtotime($value['last']['time']);
+				$in_speed = (int)(gmp_intval(gmp_add($value['inOctets'], "-{$value['last']['in_total']}")) / $delta);
+				$out_speed = (int)(gmp_intval(gmp_add($value['outOctets'], "-{$value['last']['out_total']}")) / $delta);
+				$sql .= " INSERT INTO {$table} (id, in_total, out_total, in_speed, out_speed, device_id, time) VALUES (uuid(), '{$value['inOctets']}', '{$value['outOctets']}', '{$in_speed}', '{$out_speed}', '{$key}', '{$time}'); ";
+			}
+		}
 		break;
 
 	case 'cpu_log':
-		# code...
+		$result = $snmp->cpu();
+		if(!$result) json(false, 'snmp error!');
+
+		$snmpDevice = array();
+		foreach ($result as $key => $value) {
+			$snmpDevice[$serverModel->device_hash($watch['server_id'], $item['server_hardware_id'], $key)] = $value;
+		}
+		$snmpDevice = array_intersect_key($snmpDevice, $deviceList);
+		foreach ($snmpDevice as $key => $value){
+			$snmpDevice[$key] = array();
+			$snmpDevice[$key]['load'] = $value;
+			$snmpDevice[$key]['device_id'] = $deviceList[$key]['server_device_id'];
+		}
+		
+		$sql = "INSERT INTO {$table} (id, used, device_id, time) VALUES ";
+		$sqlArray = array();
+		$time = date('Y-m-d H:i:s');
+		foreach ($snmpDevice as $key => $value) {
+			$sqlArray[] = "(uuid(), '{$value['load']}', '{$value['device_id']}', '{$time}')";
+		}
+		$sql .= implode(',', $sqlArray);
+
 		break;
 
 	case 'memory_log':
-		# code...
+		$result = $snmp->memory_total();
+		if(!$result) json(false, 'snmp error!');
+		$total = (int)$result;
+		$result = $snmp->process();
+		if(!$result) json(false, 'snmp error!');
+
+		$used_memory = 0;
+		foreach ($result as $key => $value) $used_memory += (int)$value['memory'];
+		$time = date('Y-m-d H:i:s');
+		$sql = " INSERT INTO {$table} (id, total_amount, used_amount, time) VALUES (uuid(), '{$total}', '{$used_memory}',  '{$time}'); ";
+
 		break;
 
 	case 'processcount_log':
+		$result = $snmp->process();
+		if(!$result) json(false, 'snmp error!');
 		break;
 
 	default:
