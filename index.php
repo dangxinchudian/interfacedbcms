@@ -116,6 +116,7 @@ router('server-list',function(){ require('./controller/server/list.php'); });
 router('server-modify',function(){ require('./controller/server/modify.php'); });
 router('server-remove',function(){ require('./controller/server/remove.php'); });
 router('server-item-init',function(){ require('./controller/server/item-init.php'); });
+router('server-item-list',function(){ require('./controller/server/item-list.php'); });
 router('server-get',function(){ require('./controller/server/get.php'); });
 
 router('test',function(){

@@ -184,6 +184,11 @@ class server extends model{
 			else return false;
 		}
 	}
+
+	public function selectWatch($server_id, $item_id){
+		$sql = "SELECT * FROM server_watch WHERE server_item_id = '{$item_id}' AND server_id = '{$server_id}' AND remove = 0";
+		return $this->db()->query($sql, 'row');		
+	}
 	/*public function itemSql($item){
 		$array = array(
 			'cpu' => "CREATE TABLE IF NOT EXISTS `cpu_log` ( `id` char(36) NOT NULL, `used` tinyint(3) unsigned NOT NULL COMMENT '使用百分比', `device_id` int(10) unsigned NOT NULL COMMENT '设备ID', `time` datetime NOT NULL );",
