@@ -107,6 +107,7 @@ router('site-aws-action-visitor',function(){ require('./controller/aws/visitor.p
 router('site-aws-action-location',function(){ require('./controller/aws/location.php'); });
 router('site-aws-action-location-zh',function(){ require('./controller/aws/location-zh.php'); });
 router('site-aws-action-browser',function(){ require('./controller/aws/browser.php'); });
+router('site-aws-action-get',function(){ require('./controller/aws/get.php'); });
 
 router('server-add',function(){ require('./controller/server/add.php'); });
 router('server-snmp-set',function(){ require('./controller/server/snmp-set.php'); });
