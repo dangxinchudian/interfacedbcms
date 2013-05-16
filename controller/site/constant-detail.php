@@ -5,16 +5,16 @@
 		json(false, '未登录');
 	});
 
-	// $site_id = filter('site_id', '/^[0-9]{1,9}$/', 'siteID错误');
-	// $time_unit = filter('time_unit', '/^day|month|year$/', '时间单位错误');
-	// $start_time = filter('start_time', '/^[0-9]{1,10}$/', '起始时间单位错误');
-	// $stop_time = filter('stop_time', '/^[0-9]{1,10}$/', '结束时间单位错误');
-	// $node_id = filter('node_id', '/^[0-9\-]{1,10}$/', 'node_id错误');
-	$site_id = 0;
-	$time_unit = 'day';
-	$start_time = time() - 3600*24*5;
-	$stop_time = time();
-	$node_id = 0;
+	$site_id = filter('site_id', '/^[0-9]{1,9}$/', 'siteID错误');
+	$time_unit = filter('time_unit', '/^day|month|year$/', '时间单位错误');
+	$start_time = filter('start_time', '/^[0-9]{1,10}$/', '起始时间单位错误');
+	$stop_time = filter('stop_time', '/^[0-9]{1,10}$/', '结束时间单位错误');
+	$node_id = filter('node_id', '/^[0-9\-]{1,10}$/', 'node_id错误');
+	// $site_id = 0;
+	// $time_unit = 'day';
+	// $start_time = time() - 3600*24*5;
+	// $stop_time = time();
+	// $node_id = 0;
 
 	if($stop_time < $start_time) json(false, 'time error!');
 
