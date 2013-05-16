@@ -5,13 +5,13 @@
 		json(false, '未登录');
 	});
 
-	$site_id = filter('site_id', '/^[0-9]{1,9}$/', 'siteID格式错误');
-	$start_time = filter('start_time', '/^[0-9]{1,10}$/', '起始时间单位错误');
-	$stop_time = filter('stop_time', '/^[0-9]{1,10}$/', '结束时间单位错误');
+	// $site_id = filter('site_id', '/^[0-9]{1,9}$/', 'siteID格式错误');
+	// $start_time = filter('start_time', '/^[0-9]{1,10}$/', '起始时间单位错误');
+	// $stop_time = filter('stop_time', '/^[0-9]{1,10}$/', '结束时间单位错误');
 
-	/*$site_id = 0;
-	$start_time = time() - 60 * 60 * 24 * 5;
-	$stop_time = time();*/
+	$site_id = 0;
+	$start_time = time() - 60 * 60 * 24 * 5 -3000;
+	$stop_time = time();
 
 	$siteModel = model('site');
 	if($site_id == 0) $info = $siteModel->get($user_id, 'user_id');
@@ -26,20 +26,22 @@
 
 	$http = array();
 	$attack = array();
-	for($i = 0 ; $i< ($stop_time - $start_time) / (3600*24); $i++){
-		$http[date('Ym', $start_time + 3600 * 24 * $i)] = 0;
-		$attack[date('Ym', $start_time + 3600 * 24 * $i)] = 0;
+	for($i = 0 ; $i <= ($stop_time - $start_time) / (3600*24); $i++){
+		$http[date('Ymd', $start_time + 3600 * 24 * $i)] = 0;
+		$attack[date('Ymd', $start_time + 3600 * 24 * $i)] = 0;
 	}
-	foreach ($info as $key => $value) {
-		$http[$value['day']] = (int)$value['hits'];
-	}
-	$result = array(
-		0 => array_keys($http),
-		1 => array_values($http),
-		2 => array_values($attack)
-	);
 
-	json(true, $result);
+	print_r($http);
+	// foreach ($info as $key => $value) {
+	// 	$http[$value['day']] = (int)$value['hits'];
+	// }
+	// $result = array(
+	// 	0 => array_keys($http),
+	// 	1 => array_values($http),
+	// 	2 => array_values($attack)
+	// );
+
+	// json(true, $result);
 
 
 ?>
