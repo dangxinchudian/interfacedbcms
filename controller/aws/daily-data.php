@@ -31,17 +31,16 @@
 		$attack[date('Ymd', $start_time + 3600 * 24 * $i)] = 0;
 	}
 
-	print_r($http);
-	// foreach ($info as $key => $value) {
-	// 	$http[$value['day']] = (int)$value['hits'];
-	// }
-	// $result = array(
-	// 	0 => array_keys($http),
-	// 	1 => array_values($http),
-	// 	2 => array_values($attack)
-	// );
+	foreach ($info as $key => $value) {
+		$http[$value['day']] = (int)$value['hits'];
+	}
+	$result = array(
+		0 => array_keys($http),
+		1 => array_values($http),
+		2 => array_values($attack)
+	);
 
-	// json(true, $result);
+	json(true, $result);
 
 
 ?>

@@ -36,11 +36,11 @@
 			$data[date('Y-m-d', $start_time + 3600 * 24 * $i)] = 0;
 		}
 	}elseif($time_unit == 'month'){
-		for($i = 0 ; $i< ($stop_time - $start_time) / (3600*24*30); $i++){
+		for($i = 0 ; $i<= ($stop_time - $start_time) / (3600*24*30); $i++){
 			$data[date('Y-m', $start_time + 3600 * 24 * $i * 30)] = 0;
 		}
 	}elseif($time_unit == 'year'){
-		for($i = 0 ; $i< ($stop_time - $start_time) / (3600*24*365); $i++){
+		for($i = 0 ; $i<= ($stop_time - $start_time) / (3600*24*365); $i++){
 			$data[date('Y', $start_time + 3600 * 24 * $i * 365)] = 0;
 		}			
 	}
