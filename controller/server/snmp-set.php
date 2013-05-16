@@ -30,7 +30,7 @@
 	$updateArray['snmp_port'] = $port;
 	$updateArray['snmp_version'] = $version;
 	if($version == 2){
-		if($community == null) json(false, 'community不能为空');
+		if($community == null) $community = 'public';
 		$updateArray['snmp_token'] = jencode($community);
 	}else{
 		if($user == null) json(false, 'community不能为空');
