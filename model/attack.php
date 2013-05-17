@@ -23,6 +23,14 @@ class attack extends model{
 		return $result;
 	}
 
+	public function locationZh($site_id, $start_time, $stop_time){
+		$start_time = date('Y-m-d H:i:s', $start_time);
+		$stop_time = date('Y-m-d H:i:s', $stop_time);
+		$table = "mosite_{$site_id}.attack_log";
+		$sql = "SELECT count(*) AS count,zh_region FROM {$table} WHERE time > '{$start_time}' AND time <= '{$stop_time}' GROUP BY zh_region";
+		return $this->db()->query($sql, 'array');		
+	}
+
 }
 
 
