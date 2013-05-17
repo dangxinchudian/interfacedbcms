@@ -110,6 +110,7 @@ router('site-aws-action-browser',function(){ require('./controller/aws/browser.p
 router('site-aws-action-get',function(){ require('./controller/aws/get.php'); });
 
 router('site-attack-get',function(){ require('./controller/attack/get.php'); });
+router('site-attack-ip',function(){ require('./controller/attack/ip.php'); });
 
 router('server-add',function(){ require('./controller/server/add.php'); });
 router('server-snmp-set',function(){ require('./controller/server/snmp-set.php'); });
