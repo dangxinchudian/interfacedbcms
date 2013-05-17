@@ -31,6 +31,14 @@ class attack extends model{
 		return $this->db()->query($sql, 'array');		
 	}
 
+	public function mode($site_id, $start_time, $stop_time){
+		$start_time = date('Y-m-d H:i:s', $start_time);
+		$stop_time = date('Y-m-d H:i:s', $stop_time);
+		$table = "mosite_{$site_id}.attack_log";
+		$sql = "SELECT count(*) AS count ,attack_type FROM {$table} WHERE time > '{$start_time}' AND time <= '{$stop_time}' GROUP BY attack_type";
+		return $this->db()->query($sql, 'array');
+	}
+
 }
 
 
