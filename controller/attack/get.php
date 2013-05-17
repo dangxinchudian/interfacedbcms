@@ -36,11 +36,18 @@
 	);
 
 	foreach ($result as $key => $value) {
-		if(isset($attack[$value['severity']])) $attack[$value['severity']] = $value['count(*)'];
+		if(isset($attack[$value['severity']])) $attack[$value['severity']] = (int)$value['count(*)'];
 	}
 
+	$viewdata = array(
+		'high' => $attack['EMERGENCY'] + $attack['ALERT'] + $attack['CRITICAL'],
+		'medium' => $attack['ERROR'] + $attack['WARNING'],
+		'low' => $attack['INFO'] + $attack['DEBUG'] + $attack['NOTICE']
+	);
+
 	$return = array(
-		'attack' => $attack,
+		'source' => $attack,
+		'view' => $viewdata,
 		'site_id' => $info['site_id'],
 	);
 	json(true, $return);
