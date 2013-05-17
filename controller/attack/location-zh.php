@@ -9,7 +9,7 @@
 	$start_time = filter('start_time', '/^[0-9]{1,10}$/', '起始时间单位错误');
 	$stop_time = filter('stop_time', '/^[0-9]{1,10}$/', '结束时间单位错误');
 
-	// $site_id = 0;
+	// $site_id = 8;
 	// $start_time = time() - 60 * 60 * 24 * 5;
 	// $stop_time = time();
 	
