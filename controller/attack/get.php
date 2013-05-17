@@ -5,13 +5,13 @@
 		json(false, '未登录');
 	});
 
-	$site_id = filter('site_id', '/^[0-9]{1,9}$/', 'siteID格式错误');
-	$start_time = filter('start_time', '/^[0-9]{1,10}$/', '起始时间单位错误');
-	$stop_time = filter('stop_time', '/^[0-9]{1,10}$/', '结束时间单位错误');
+	// $site_id = filter('site_id', '/^[0-9]{1,9}$/', 'siteID格式错误');
+	// $start_time = filter('start_time', '/^[0-9]{1,10}$/', '起始时间单位错误');
+	// $stop_time = filter('stop_time', '/^[0-9]{1,10}$/', '结束时间单位错误');
 
-	// $site_id = 0;
-	// $start_time = time() - 60 * 60 * 24 * 5;
-	// $stop_time = time();
+	$site_id = 0;
+	$start_time = time() - 60 * 60 * 24 * 5;
+	$stop_time = time();
 	
 	$siteModel = model('site');
 	if($site_id == 0) $info = $siteModel->get($user_id, 'user_id');
@@ -22,7 +22,9 @@
 	if($info['user_id'] != $user_id) json(false, '不允许操作他人站点');
 
 	$attackModel = model('attack');
-	$result = $attackModel->summary($info['site_id'], $start_time, $stop_time);
+	$result = $attackModel->severity($info['site_id'], $start_time, $stop_time);
+	$ip_total = $attackModel->ip_count($info['site_id'], $start_time, $stop_time);
+	$total = $attackModel->total_count($info['site_id'], $start_time, $stop_time);
 
 	$attack = array(
 		'EMERGENCY' => 0,
@@ -46,8 +48,9 @@
 	);
 
 	$return = array(
-		'source' => $attack,
-		'view' => $viewdata,
+		'severity' => $attack,
+		'rank' => $viewdata,
+		'summary' => array('ip' => $ip_total, 'total' => $total),
 		'site_id' => $info['site_id'],
 	);
 	json(true, $return);
