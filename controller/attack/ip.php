@@ -6,8 +6,8 @@
 	});
 
 	$site_id = filter('site_id', '/^[0-9]{1,9}$/', 'siteID格式错误');
-	$start_time = filter('start_time', '/^[0-9]{1,10}$/', '起始时间单位错误', true);
-	$stop_time = filter('stop_time', '/^[0-9]{1,10}$/', '结束时间单位错误', true);
+	$start_time = filter('start_time', '/^[0-9]{1,10}$/', '起始时间单位错误');
+	$stop_time = filter('stop_time', '/^[0-9]{1,10}$/', '结束时间单位错误');
 	$page = filter('page', '/^[0-9]{1,9}$/', '页码格式错误');
 	$limit = filter('limit', '/^[0-9]{1,9}$/', '偏移格式错误');
 
