@@ -8,14 +8,18 @@
 	$site_id = filter('site_id', '/^[0-9]{1,9}$/', 'siteID格式错误');
 	$start_time = filter('start_time', '/^[0-9]{1,10}$/', '起始时间单位错误');
 	$stop_time = filter('stop_time', '/^[0-9]{1,10}$/', '结束时间单位错误');
-	$start_time = filter('start_time', '/^[0-9]{1,10}$/', '起始时间单位错误');
-	$stop_time = filter('stop_time', '/^[0-9]{1,10}$/', '结束时间单位错误');
+	$page = filter('page', '/^[0-9]{1,9}$/', '页码格式错误');
+	$limit = filter('limit', '/^[0-9]{1,9}$/', '偏移格式错误');
 	$rank = filter('rank', '/^high|medium|low$/', 'rank格式错误', true);
 	$severity = filter('rank', '/^.{1,99}$/', 'severity格式错误', true);
 
 	// $site_id = 0;
 	// $start_time = time() - 60 * 60 * 24 * 5;
 	// $stop_time = time();
+	// $page = 1;
+	// $limit = 10;
+	// $rank = 'low';
+	// $severity = null;
 	
 	if($limit <= 0) $limit = 1;
 	if($page < 1) $page = 1;
@@ -44,10 +48,11 @@
 	}else json(false, 'rank,severity必须提交一个');
 
 	$attackModel = model('attack');
-	$result = $attackModel->mode($info['site_id'], $start_time, $stop_time);
+	$result = $attackModel->detail($info['site_id'], $start_time, $stop_time, $start, $limit, $severityArray);
+	$result['limit'] = $limit;
+	$result['page'] = $page;
 
-
-	// json(true, $result);
+	json(true, $result);
 
 
 ?>
