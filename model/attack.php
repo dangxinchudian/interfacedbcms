@@ -1,14 +1,11 @@
 <?php
 
-class attack extends modelLog{
+class attack extends model{
 
-	public function daily($domain, $start_time, $stop_time){
-
-		$schema = str_replace('.', '_', $domain).'_attack_log';
-		$check = $this->checkSchema($schema);
-		if(!$check) return false;
-
-
+	public function summary($site_id, $start_time, $stop_time){
+		$table = "mosite_{$site_id}.attack_log";
+		$sql = "SELECT count(*),severity FROM {$table} GROUP BY severity";
+		return $this->db()->query($sql, 'array');
 	}
 
 	public function checkSchema($schema){

@@ -109,6 +109,8 @@ router('site-aws-action-location-zh',function(){ require('./controller/aws/locat
 router('site-aws-action-browser',function(){ require('./controller/aws/browser.php'); });
 router('site-aws-action-get',function(){ require('./controller/aws/get.php'); });
 
+router('site-attack-get',function(){ require('./controller/attack/get.php'); });
+
 router('server-add',function(){ require('./controller/server/add.php'); });
 router('server-snmp-set',function(){ require('./controller/server/snmp-set.php'); });
 router('server-snmp-check',function(){ require('./controller/server/snmp-check.php'); });
