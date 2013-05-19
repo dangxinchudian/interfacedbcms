@@ -4,6 +4,15 @@
 
 class aws extends model{
 
+	public function summary($site_id, $start_time, $stop_time){
+		$table = $this->checkTable("molog_{$site_id}", 'daily');
+		if(!$table) return array();
+		$start_time = date('Ymd', $start_time);
+		$stop_time = date('Ymd', $stop_time);
+		$sql = "SELECT SUM(visits) AS visits,SUM(hits) AS hits,SUM(bandwidth) AS bandwidth FROM molog_{$site_id}.daily WHERE daily.day >= {$start_time} AND daily.day <= {$stop_time}";
+		return $this->db()->query($sql, 'row');		
+	}
+
 	public function general($month, $site_id){
 		$table = $this->checkTable("molog_{$site_id}", 'general');
 		if(!$table) return array();

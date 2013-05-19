@@ -7,9 +7,13 @@
 
 	$page = filter('page', '/^[0-9]{1,9}$/', '页码格式错误');
 	$limit = filter('limit', '/^[0-9]{1,9}$/', '偏移格式错误');
+	$start_time = filter('start_time', '/^[0-9]{1,10}$/', '起始时间单位错误');
+	$stop_time = filter('stop_time', '/^[0-9]{1,10}$/', '结束时间单位错误');
 
-	/*$page = 1;
-	$limit = 10;*/
+	// $page = 1;
+	// $limit = 10;
+	// $start_time = time() - 3600 * 24 *5;
+	// $stop_time = time();
 
 	if($limit <= 0) $limit = 1;
 	if($page < 1) $page = 1;
@@ -17,13 +21,17 @@
 
 	$siteModel = model('site');
 	$awsModel = model('aws');
+	$attackModel = model('attack');
+
 	$result = $siteModel->siteList($user_id, $start, $limit, 0);
 	$count = $siteModel->siteCount($user_id, 0);
 	foreach ($result as $key => $value) {
-		$general = $awsModel->general(date('Ym'), $value['site_id']);
-		$result[$key]['visits'] = (isset($general['visits'])) ? $general['visits'] : 0;
-		$result[$key]['visits_unique'] = (isset($general['visits_unique'])) ? $general['visits_unique'] : 0;
-		$result[$key]['hits'] = (isset($general['hits'])) ? $general['hits'] : 0;
+		$http = $awsModel->summary($value['site_id'], $start_time, $stop_time);
+		$result[$key]['hits'] = (isset($http['hits'])) ? $http['hits'] : 0;
+		$result[$key]['visits'] = (isset($http['visits'])) ? $http['visits'] : 0;
+		$result[$key]['bandwidth'] = (isset($general['bandwidth'])) ? $general['bandwidth'] : 0;
+		$result[$key]['attack_ip'] = $attackModel->ip_count($value['site_id'], $start_time, $stop_time);
+		$result[$key]['attack_total'] = $attackModel->total_count($value['site_id'], $start_time, $stop_time);
 	}
 	$array = array(
 		'page' => $page,
