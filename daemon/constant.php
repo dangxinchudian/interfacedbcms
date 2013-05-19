@@ -57,6 +57,8 @@ $callback = function($data, $info, $self){
     }
     $db->query($sql, 'exec');
 	//echo "{$self['site_id']} : {$info['url']}   {$info['total_time']}\n";
+
+
     if($self['node_id'] == 0){
         // ----------------------------------------------------------
         // -----------------------fault-----------------------------
@@ -93,15 +95,23 @@ $callback = function($data, $info, $self){
                 $sql = "UPDATE constant_fault SET keep_time = keep_time + {$self['period']} WHERE id = '{$fault['id']}'";
                 $db->query($sql, 'exec');
             }
-        }else{      //闭合故障
+        }else{   //闭合故障
             if(!empty($fault)){
                 $updateArray = array('status' => 'slove');
                 $db->update('constant_fault', $updateArray, "id = '{$fault['id']}'");
             }
         }
 
+        // ----------------------------------------------------------
+        // -----------------------alarm-----------------------------
+        // ----------------------------------------------------------
+
     }
 };
+
+function alarm($site_id, $http_code){
+    
+}
 
 for(;;){
     $time = time();

@@ -39,5 +39,13 @@ class alarm extends model{
 	}
 
 
+	public function triggerConstant($site_id, $http_code){
+		if($http_code == 200) return false;
+		$sql = "SELECT max_limit,keep_time,cool_down_time,notice_limit  FROM alarm_rule WHERE site_id = '{$site_id}' AND remove = 0";
+		$rule = $this->db()->query($sql, 'row');
+		if(empty($rule)) return false;
+		//检查告警规则
+
+	}
 }
 ?>
