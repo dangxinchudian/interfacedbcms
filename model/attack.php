@@ -30,7 +30,6 @@ class attack extends model{
 		return $result;
 	}
 
-
 	public function ip($site_id, $start_time, $stop_time, $start, $limit){
 		$start_time = date('Y-m-d H:i:s', $start_time);
 		$stop_time = date('Y-m-d H:i:s', $stop_time);

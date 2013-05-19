@@ -32,6 +32,10 @@
 		$result[$key]['bandwidth'] = (isset($general['bandwidth'])) ? $general['bandwidth'] : 0;
 		$result[$key]['attack_ip'] = $attackModel->ip_count($value['site_id'], $start_time, $stop_time);
 		$result[$key]['attack_total'] = $attackModel->total_count($value['site_id'], $start_time, $stop_time);
+		$result[$key]['percent'] = 0;
+		if($result[$key]['visits'] != 0) $result[$key]['percent'] = round($result[$key]['attack_total'] / $result[$key]['visits'] * 100, 2);
+		if($result[$key]['percent'] > 100) $result[$key]['percent'] = 100;
+		
 	}
 	$array = array(
 		'page' => $page,
