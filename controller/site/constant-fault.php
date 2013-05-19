@@ -34,6 +34,13 @@
 	$result = $constantModel->fault($info['site_id'], $start_time, $stop_time, $start, $limit);
 	$result['limit'] = $limit;
 	$result['page'] = $page;
+	foreach ($result['list'] as $key => $value) {
+		$result['list'][$key]['end_time'] = 0;
+		if($value['status'] == 'slove'){
+			$result['list'][$key]['end_time'] = date('Y-m-d H:i:s', strtotime($value['time']) + $value['keep_time']);
+		}
+		$result['list'][$key]['msg'] = errorHeader($value['http_code']);
+	}
 
 	json(true, $result);
 
