@@ -10,7 +10,7 @@
 	// $start_time = filter('start_time', '/^[0-9]{1,10}$/', '起始时间单位错误');
 	// $stop_time = filter('stop_time', '/^[0-9]{1,10}$/', '结束时间单位错误');
 
-	$watch_id = 2;
+	$watch_id = 1;
 	$time_unit = 'day';
 	$start_time = time() - 3600*24*5;
 	$stop_time = time();
@@ -22,15 +22,44 @@
 	if($watch['remove'] > 0) json(false, '监控已经被移除');
 	if($watch['user_id'] != $user_id) json(false, '不允许操作他人监控');
 
-	$watch['item'] = $serverModel->item($watch['server_item_id']);
-	$watch['device'] = array();
-	if($watch['item']['server_hardware_id'] != 0){
-		$watch['device'] = $serverModel->getDevice($watch['item']['server_hardware_id'], 'hardware_id');
-		foreach ($watch['device'] as $key => $value) {
-			$watch['device'][$key]['value'] = jdecode($value['value']);
+	$item = $serverModel->item($watch['server_item_id']);
+
+	$result = $serverModel->log_data($watch['server_id'], $item['table_name'], $time_unit, $start_time, $stop_time);
+
+	$data = array();
+	//date&data complete
+	if($time_unit == 'day'){
+		for($i = 0 ; $i<= ($stop_time - $start_time) / (3600*24); $i++){
+			$max[date('Y-m-d', $start_time + 3600 * 24 * $i)] = 0;
+			$min[date('Y-m-d', $start_time + 3600 * 24 * $i)] = 0;
+			$avg[date('Y-m-d', $start_time + 3600 * 24 * $i)] = 0;
 		}
+	}elseif($time_unit == 'month'){
+		for($i = 0 ; $i<= ($stop_time - $start_time) / (3600*24*30); $i++){
+			$max[date('Y-m', $start_time + 3600 * 24 * $i * 30)] = 0;
+			$min[date('Y-m', $start_time + 3600 * 24 * $i * 30)] = 0;
+			$avg[date('Y-m', $start_time + 3600 * 24 * $i * 30)] = 0;		
+		}
+	}elseif($time_unit == 'year'){
+		for($i = 0 ; $i<= ($stop_time - $start_time) / (3600*24*365); $i++){
+			$max[date('Y', $start_time + 3600 * 24 * $i * 365)] = 0;
+			$min[date('Y', $start_time + 3600 * 24 * $i * 365)] = 0;
+			$avg[date('Y', $start_time + 3600 * 24 * $i * 365)] = 0;
+		}			
 	}
 
-	json(true, $watch);
+	foreach ($result as $key => $value){
+		$max[$value['group_time']] = $value['max'];
+		$min[$value['group_time']] = $value['min'];
+		$avg[$value['group_time']] = $value['avg'];
+	}
+
+	$return = array(
+		'data' => array_values($max),
+		'max' => array_keys($max),
+		'min' => array_keys($min),
+		'avg' => array_keys($avg)
+	);
+	json(true, $result);
 
 ?>

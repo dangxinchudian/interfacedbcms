@@ -52,6 +52,26 @@ class server extends model{
 		//$this->db()->checkSchema($schema);
 	}
 
+	public function log_data($server_id, $table_name, $time_unit, $start_time, $stop_time){
+		$start_time = date('Y-m-d H:i:s', $start_time);
+		$stop_time = date('Y-m-d H:i:s', $stop_time);
+		$typeArray = array(
+			'year' => '%Y',
+			'month' => '%Y-%m',
+			'day' => '%Y-%m-%d'
+		);
+		$tableArray = array(
+			'disk_log' => "",
+			'network_log' => "",
+			'cpu_log' => "",
+			'memory_log' => "",
+			'processcount_log' => "SELECT max(amount) AS max_amount,min(amount) AS min_amount,avg(amount) AS avg_amount,date_format(time,'{$typeArray[$time_unit]}') AS group_time FROM moserver_{$server_id}.processcount_log WHERE time >= '{$start_time}' AND time <= '{$stop_time}' GROUP BY group_time ORDER BY group_time ASC"
+
+		);
+		if(!isset($tableArray[$table_name])) return false;
+		return $this->db()->query($tableArray[$table_name], 'array');		
+	}
+
 	public function serverList($user_id, $start, $limit, $remove = 0){		//1:remove,0:normal,-1:all
 		if($remove >= 0) $remove = ' AND remove = \'{$remove}\'';
 		else $remove = '';
