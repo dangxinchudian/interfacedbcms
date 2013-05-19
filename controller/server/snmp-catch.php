@@ -121,6 +121,10 @@ switch ($item['table_name']) {
 	case 'processcount_log':
 		$result = $snmp->process();
 		if(!$result) json(false, 'snmp error!');
+		$count = count($result);
+		$time = date('Y-m-d H:i:s');
+		$sql = " INSERT INTO {$table} (id, amount, time) VALUES (uuid(), '{$count}',  '{$time}'); ";
+
 		break;
 
 	default:

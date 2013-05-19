@@ -94,6 +94,7 @@ router('site-constant-active',function(){ require('./controller/site/constant-ac
 router('site-constant-node',function(){ require('./controller/site/constant-node.php'); });
 router('site-constant-detail',function(){ require('./controller/site/constant-detail.php'); });
 router('site-constant-get',function(){ require('./controller/site/constant-get.php'); });
+router('site-constant-fault',function(){ require('./controller/site/constant-fault.php'); });
 
 router('site-action-month-list',function(){ require('./controller/aws/list.php'); });
 router('site-aws-action-pages',function(){ require('./controller/aws/pages.php'); });
@@ -114,6 +115,11 @@ router('site-attack-ip',function(){ require('./controller/attack/ip.php'); });
 router('site-attack-location-zh',function(){ require('./controller/attack/location-zh.php'); });
 router('site-attack-mode',function(){ require('./controller/attack/mode.php'); });
 router('site-attack-detail',function(){ require('./controller/attack/detail.php'); });
+
+router('alarm-rule-add',function(){ require('./controller/alarm/rule-add.php'); });
+router('alarm-rule-list',function(){ require('./controller/alarm/rule-list.php'); });
+router('alarm-rule-remove',function(){ require('./controller/alarm/rule-remove.php'); });
+router('alarm-rule-modify',function(){ require('./controller/alarm/rule-modify.php'); });
 
 router('server-add',function(){ require('./controller/server/add.php'); });
 router('server-snmp-set',function(){ require('./controller/server/snmp-set.php'); });
@@ -137,6 +143,11 @@ router('test2',function(){
 
 router('test3', function(){
 	echo '<form method="POST" action="./server-add"><input name="ip" value=""/><input type="submit"/></form>';
+});
+
+router('test4', function(){
+	$fault = model('fault');
+	$fault->triggerConstant(2, 200);
 });
 
 /*================路由表<结束>========================*/

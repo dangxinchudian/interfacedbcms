@@ -14,9 +14,10 @@ $callback = function($data, $info, $self){
     $database = "mosite_{$self['site_id']}";
     $time = date('Y-m-d H:i:s');
     if($self['node_id'] != 0){
-        $info = json_decode($data, true);
-        if(!$info) return false;
-        $time = $info['time'];
+        $remote = json_decode($data, true);
+        if(!$remote) return false;
+        $time = $remote['time'];
+        $info = array_merge($info, $remote);
     }
     $sql = "INSERT INTO {$database}.constant_log 
     (
@@ -56,6 +57,50 @@ $callback = function($data, $info, $self){
     }
     $db->query($sql, 'exec');
 	//echo "{$self['site_id']} : {$info['url']}   {$info['total_time']}\n";
+    if($self['node_id'] == 0){
+        // ----------------------------------------------------------
+        // -----------------------fault-----------------------------
+        // ----------------------------------------------------------
+
+        //检查未闭合的故障
+        $sql = "SELECT * FROM constant_fault WHERE site_id = '{$self['site_id']}' AND status = 'unslove' ORDER BY time DESC";
+        $result = $db->query($sql, 'array');
+        $fault = array();
+        if(!empty($result)) $fault = array_shift($result);
+
+        //正常情况下最多只会有一个unslove
+        if(count($result) > 0){     //如果出现多个。除了第一个其他全部闭合
+            $fault_array = array();
+            foreach ($result as $key => $value) $fault_array[] = $value['id'];
+            $fault_where = implode(',', $fault_array);
+            $updateArray = array('status' => 'slove');
+            $db->update('constant_fault', $updateArray, "id in ({$fault_where})");
+            echo '闭合修复\n';
+        }
+
+        //$fault_id
+        if($info['http_code'] != 200){      //开启故障，持续故障
+            if(empty($fault)){      //开启故障
+                $insertArray = array(
+                    'time' => date('Y-m-d H:i:s'),
+                    'keep_time' => $self['period'],
+                    'user_id' => $self['user_id'],
+                    'site_id' => $self['site_id'],
+                    'http_code' => $info['http_code']
+                );
+                $result = $db->insert('constant_fault', $insertArray);
+            }else{      //持续故障时间累加
+                $sql = "UPDATE constant_fault SET keep_time = keep_time + {$self['period']} WHERE id = '{$fault['id']}'";
+                $db->query($sql, 'exec');
+            }
+        }else{      //闭合故障
+            if(!empty($fault)){
+                $updateArray = array('status' => 'slove');
+                $db->update('constant_fault', $updateArray, "id = '{$fault['id']}'");
+            }
+        }
+
+    }
 };
 
 for(;;){
@@ -65,7 +110,7 @@ for(;;){
     $node = $db->query($sql, 'array');
 
     //url-list
-    $sql = "SELECT site_id,domain,path,port,last_watch_time,period FROM monitor.site WHERE last_watch_time + period < $time  AND remove = '0' AND constant_status = '1'";
+    $sql = "SELECT user_id,site_id,domain,path,port,last_watch_time,period FROM monitor.site WHERE last_watch_time + period < $time  AND remove = '0' AND constant_status = '1'";
     $result = $db->query($sql, 'array');
 
     $urls = array();
@@ -76,7 +121,8 @@ for(;;){
             'site_id' => $value['site_id'],
             'node_id' => 0,
             'last_watch_time' => $value['last_watch_time'],
-            'period' => $value['period']
+            'period' => $value['period'],
+            'user_id' => $value['user_id']
         );
     }
     $local = rolling_curl($urls, $callback, false);
@@ -91,7 +137,8 @@ for(;;){
                 'site_id' => $value['site_id'],
                 'node_id' => $nodevalue['constant_node_id'],
                 'last_watch_time' => $value['last_watch_time'],
-                'period' => $value['period']
+                'period' => $value['period'],
+                'user_id' => $value['user_id']
             );
         }
         $node[$nodekey]['count'] = rolling_curl($urls, $callback, true);
