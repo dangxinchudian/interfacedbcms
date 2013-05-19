@@ -16,13 +16,16 @@
 	$siteModel = model('site');
 	if($site_id == 0) $info = $siteModel->get($user_id, 'user_id');
 	else $info = $siteModel->get($site_id);
+	$site_id = $info['site_id'];
 
 	if(empty($info)) json(false, '站点不存在');
 	if($info['remove'] > 0) json(false, '站点已经被移除');
 	if($info['user_id'] != $user_id) json(false, '不允许操作他人站点');
 
 	$awsModel = model('aws');
+	$attackModel = model('attack');
 	$info = $awsModel->daily($info['site_id'], $start_time, $stop_time);
+	$attackDaily = $attackModel->daily($site_id, $start_time, $stop_time);
 
 	$http = array();
 	$attack = array();
@@ -31,14 +34,24 @@
 		$attack[date('Ymd', $start_time + 3600 * 24 * $i)] = 0;
 	}
 
+	foreach ($attackDaily as $key => $value) {
+		$attack[$value['group_time']] = (int)$value['count'];
+	}
+
 	foreach ($info as $key => $value) {
 		$http[$value['day']] = (int)$value['hits'];
 	}
+
 	$result = array(
 		0 => array_keys($http),
 		1 => array_values($http),
 		2 => array_values($attack)
 	);
+
+	// $attackModel = model('attack');
+
+	// $a = $attackModel->daily($site_id, $start_time, $stop_time);
+	// print_r($a);
 
 	json(true, $result);
 
