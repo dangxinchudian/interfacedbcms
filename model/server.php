@@ -52,7 +52,7 @@ class server extends model{
 		//$this->db()->checkSchema($schema);
 	}
 
-	public function log_data($server_id, $table_name, $time_unit, $start_time, $stop_time){
+	public function log_data($server_id, $table_name, $device_id = 0, $time_unit, $start_time, $stop_time){
 		$start_time = date('Y-m-d H:i:s', $start_time);
 		$stop_time = date('Y-m-d H:i:s', $stop_time);
 		$typeArray = array(
@@ -60,12 +60,18 @@ class server extends model{
 			'month' => '%Y-%m',
 			'day' => '%Y-%m-%d'
 		);
+		if($device_id != 0) $device = " AND device_id = '{$device_id}' ";
+		else $device = '';
 		$tableArray = array(
-			'disk_log' => "",
-			'network_log' => "",
-			'cpu_log' => "",
-			'memory_log' => "",
-			'processcount_log' => "SELECT max(amount) AS max_amount,min(amount) AS min_amount,avg(amount) AS avg_amount,date_format(time,'{$typeArray[$time_unit]}') AS group_time FROM moserver_{$server_id}.processcount_log WHERE time >= '{$start_time}' AND time <= '{$stop_time}' GROUP BY group_time ORDER BY group_time ASC"
+			'processcount_log' => "SELECT max(amount) AS max_amount,min(amount) AS min_amount,avg(amount) AS avg_amount,date_format(time,'{$typeArray[$time_unit]}') AS group_time FROM moserver_{$server_id}.processcount_log WHERE time >= '{$start_time}' AND time <= '{$stop_time}' GROUP BY group_time ORDER BY group_time ASC",
+
+			'network_log' => "SELECT device_id,max(in_speed) AS max_in_speed,min(in_speed) AS min_in_speed,avg(in_speed) AS avg_in_speed,max(out_speed) AS max_out_speed,min(out_speed) AS min_out_speed,avg(out_speed) AS avg_out_speed,date_format(time,'{$typeArray[$time_unit]}') AS group_time FROM moserver_{$server_id}.network_log WHERE time >= '{$start_time}' AND time <= '{$stop_time}' GROUP BY group_time,device_id",
+
+			'cpu_log' => "SELECT device_id,max(used) AS max_per,min(used) AS min_per,avg(used) AS avg_per,date_format(time,'{$typeArray[$time_unit]}') AS group_time FROM moserver_{$server_id}.cpu_log WHERE time >= '{$start_time}' AND time <= '{$stop_time}' GROUP BY group_time,device_id",
+
+			'memory_log' => "SELECT total_amount,max(used_amount) AS max_used,min(used_amount) AS min_used,avg(used_amount) AS avg_used,date_format(time,'{$typeArray[$time_unit]}') AS group_time FROM moserver_{$server_id}.memory_log WHERE time >= '{$start_time}' AND time <= '{$stop_time}' GROUP BY group_time ORDER BY group_time ASC",
+
+			'disk_log' => "SELECT device_id,total_amount,max(used_amount) AS max_amount,min(used_amount) AS min_amount,avg(used_amount) AS avg_amount,date_format(time,'{$typeArray[$time_unit]}') AS group_time FROM moserver_{$server_id}.disk_log WHERE time >= '{$start_time}' AND time <= '{$stop_time}' {$device} GROUP BY group_time,device_id"
 
 		);
 		if(!isset($tableArray[$table_name])) return false;
