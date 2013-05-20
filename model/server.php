@@ -114,15 +114,25 @@ class server extends model{
 		}
 	}
 
-	public function getDevice($value, $type = 'device_id'){
-		if($type == 'device_id'){
-			$sql = "SELECT * FROM server_device WHERE server_device_id = '{$value}'";
+	// public function getDevice($value, $type = 'device_id'){
+	// 	if($type == 'device_id'){
+	// 		$sql = "SELECT * FROM server_device WHERE server_device_id = '{$value}'";
+	// 		return $this->db()->query($sql, 'row');
+	// 	}else{
+	// 		$sql = "SELECT * FROM server_device WHERE server_hardware_id = '{$value}' AND remove = 0";
+	// 		return $this->db()->query($sql, 'array');
+	// 	}
+	// }
+
+	public function getDevice($server_id, $hardware_id = false){
+		if($hardware_id === false){
+			$sql = "SELECT * FROM server_device WHERE server_device_id = '{$server_id}'";
 			return $this->db()->query($sql, 'row');
 		}else{
-			$sql = "SELECT * FROM server_device WHERE server_hardware_id = '{$value}' AND remove = 0";
+			$sql = "SELECT * FROM server_device WHERE server_hardware_id = '{$hardware_id}' AND remove = 0 AND server_id = '{$server_id}'";
 			return $this->db()->query($sql, 'array');
 		}
-	}
+	}	
 
 	public function item($item_id = false){
 		if($item_id){

@@ -5,8 +5,8 @@
 		json(false, '未登录');
 	});
 
-	$watch_id = filter('watch_id', '/^[0-9]{1,9}$/', 'watch_id格式错误');
-	// $watch_id = 2;
+	// $watch_id = filter('watch_id', '/^[0-9]{1,9}$/', 'watch_id格式错误');
+	$watch_id = 2;
 
 	$serverModel = model('server');
 	$watch = $serverModel->selectWatch($watch_id);
@@ -18,7 +18,8 @@
 	$watch['item'] = $serverModel->item($watch['server_item_id']);
 	$watch['device'] = array();
 	if($watch['item']['server_hardware_id'] != 0){
-		$watch['device'] = $serverModel->getDevice($watch['item']['server_hardware_id'], 'hardware_id');
+		// $watch['device'] = $serverModel->getDevice($watch['item']['server_hardware_id'], 'hardware_id');
+		$watch['device'] = $serverModel->getDevice($watch['server_id'], $watch['item']['server_hardware_id']);
 		foreach ($watch['device'] as $key => $value) {
 			$watch['device'][$key]['value'] = jdecode($value['value']);
 		}

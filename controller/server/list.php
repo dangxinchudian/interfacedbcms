@@ -19,7 +19,7 @@
 	$result = $serverModel->serverList($user_id, $start, $limit, 0);
 	$count = $serverModel->serverCount($user_id, 0);
 
-	// $list = $serverModel->item();
+	$list = $serverModel->item();
 	foreach ($result as $key => $value) {
 		$result[$key]['cpu'] = 0; 
 		$result[$key]['disk'] = 1; 
@@ -32,6 +32,16 @@
 		// 	if(empty($result)) $list[$subkey]['server_watch_id'] = 0;
 		// 	else $list[$subkey]['server_watch_id'] = $result['server_watch_id'];
 		// }
+
+		//cpu
+		$cpu = $serverModel->getDevice($value['server_id'], 1);
+		//$device_id = 
+		//network
+
+		//memory
+
+		//disk
+		//$serverModel->lastWatch($value['server_id'], $table, $device_id = array());
 	}
 
 	$array = array(

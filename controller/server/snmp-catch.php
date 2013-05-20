@@ -22,7 +22,7 @@ else json(false, 'can\'t support v3');
 //device 
 $item = $serverModel->item($watch['server_item_id']);
 $table = "moserver_{$watch['server_id']}.{$item['table_name']}";
-$device = $serverModel->getDevice($item['server_hardware_id'], 'hardware_id');
+$device = $serverModel->getDevice($watch['server_id'], $item['server_hardware_id']);
 $deviceList = array();
 foreach ($device as $key => $value) {
 	$deviceList[$value['hash']] = $value;
