@@ -19,9 +19,9 @@
 	
 	$alarmModel = model('alarm');
 	if($type != null){
-		$rule = $alarmModel->selectRule($site_id, $type);	
+		$rule = $alarmModel->selectRule($info['site_id'], $type);	
 	}else{
-		$rule = $alarmModel->selectRule($site_id);	
+		$rule = $alarmModel->selectRule($info['site_id']);	
 	}
 
 	json(true, $rule);
