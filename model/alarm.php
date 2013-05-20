@@ -58,6 +58,7 @@ class alarm extends model{
 		$alarm = true;
 		if($available >= $rule['min_limit']) $alarm = false;
 		echo $available;
+		exit();
 
 		//检查最近的notice_limit条告警
 		$sql = "SELECT time,status FROM alarm WHERE type = 'constant' AND site_id = '{$site_id}' ORDER BY time DESC LIMIT 0,{$rule['notice_limit']}";
@@ -96,9 +97,10 @@ class alarm extends model{
 				return;
 			}
 		}
+
 		//告警已达单次上限
 		if($warning == $rule['notice_limit']) return false;
-		// echo 111;
+
 
 		//检查冷却时间
 		if(count($recent) > 0 && $recent[0]['status'] == 'warning'){
