@@ -42,7 +42,6 @@ class alarm extends model{
 		//检查是否存在告警规则
 		$sql = "SELECT site.domain,alarm_rule.min_limit,alarm_rule.keep_time,alarm_rule.cool_down_time,alarm_rule.notice_limit,user.day_notice_max,user.user_id,user.mail  FROM alarm_rule,user,site WHERE alarm_rule.site_id = '{$site_id}' AND alarm_rule.remove = 0 AND alarm_rule.type = 'constant' AND user.user_id = alarm_rule.user_id AND site.site_id = alarm_rule.site_id";
 		$rule = $this->db()->query($sql, 'row');
-		var_dump($rule);
 		if(empty($rule)) return false;
 		if($rule['min_limit'] == 0) return false;
 		
@@ -58,6 +57,7 @@ class alarm extends model{
 		$available = $http200['count(id)'] / $httptotal['count(id)'] * 100;
 		$alarm = true;
 		if($available >= $rule['min_limit']) $alarm = false;
+		echo $available;
 
 		//检查最近的notice_limit条告警
 		$sql = "SELECT time,status FROM alarm WHERE type = 'constant' AND site_id = '{$site_id}' ORDER BY time DESC LIMIT 0,{$rule['notice_limit']}";
@@ -98,6 +98,7 @@ class alarm extends model{
 		}
 		//告警已达单次上限
 		if($warning == $rule['notice_limit']) return false;
+		// echo 111;
 
 		//检查冷却时间
 		if(count($recent) > 0 && $recent[0]['status'] == 'warning'){
