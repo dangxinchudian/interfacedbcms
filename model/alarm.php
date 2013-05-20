@@ -38,6 +38,10 @@ class alarm extends model{
 		return $this->db()->update('alarm_rule', $updateArray, "alarm_rule_id = '{$rule_id}'");
 	}
 
+	public function alarmList(){
+		
+	}
+
 	public function triggerConstant($site_id, $http_code){
 		//检查是否存在告警规则
 		$sql = "SELECT site.domain,alarm_rule.min_limit,alarm_rule.keep_time,alarm_rule.cool_down_time,alarm_rule.notice_limit,user.day_notice_max,user.user_id,user.mail  FROM alarm_rule,user,site WHERE alarm_rule.site_id = '{$site_id}' AND alarm_rule.remove = 0 AND alarm_rule.type = 'constant' AND user.user_id = alarm_rule.user_id AND site.site_id = alarm_rule.site_id";

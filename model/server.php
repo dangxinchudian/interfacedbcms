@@ -42,6 +42,17 @@ class server extends model{
 			$this->db()->query($sql, 'exec');
 			$updateArray = array('remove' => 2);
 			$result = $this->update($server_id, $updateArray);
+
+			//remove watch
+			$updateArray = array('remove' => 1);
+			$this->db()->update('server_watch', $updateArray, "server_id = '{$server_id}'");
+
+			//remove device
+			$this->db()->update('server_device', $updateArray, "server_id = '{$server_id}'");
+
+			//remove the site link
+			$this->db()->update('site', array('server_id' => 0), "server_id = '{$server_id}'");
+
 			return true;
 		}else{
 			$updateArray = array('remove' => 1);
