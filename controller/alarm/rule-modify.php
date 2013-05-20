@@ -7,20 +7,20 @@
 		json(false, '未登录');
 	});
 
-	// $rule_id = filter('rule_id', '/^[0-9]{1,9}$/', 'rule_id格式错误');
-	// $max_limit = filter('max_limit', '/^[0-9]{1,9}$/', 'max_limit格式错误');
-	// $min_limit = filter('min_limit', '/^[0-9]{1,9}$/', 'min_limit格式错误');
+	$rule_id = filter('rule_id', '/^[0-9]{1,9}$/', 'rule_id格式错误');
+	$max_limit = filter('max_limit', '/^[0-9]{1,9}$/', 'max_limit格式错误');
+	$min_limit = filter('min_limit', '/^[0-9]{1,9}$/', 'min_limit格式错误');
 
-	// $keep_time = filter('min_limit', '/^[0-9]{1,9}$/', 'keep_time格式错误', 300);
-	// $cool_down_time = filter('min_limit', '/^[0-9]{1,9}$/', 'keep_time格式错误', 600);
-	// $notice_limit = filter('min_limit', '/^[0-9]{1,9}$/', 'notice_limit格式错误', 3);
+	$keep_time = filter('min_limit', '/^[0-9]{1,9}$/', 'keep_time格式错误', 300);
+	$cool_down_time = filter('min_limit', '/^[0-9]{1,9}$/', 'keep_time格式错误', 600);
+	$notice_limit = filter('min_limit', '/^[0-9]{1,9}$/', 'notice_limit格式错误', 3);
 
-	$rule_id = 1;
-	$max_limit = 99;
-	$min_limit = 0;
-	$keep_time = 300;
-	$cool_down_time = 600;
-	$notice_limit = 3;
+	// $rule_id = 1;
+	// $max_limit = 99;
+	// $min_limit = 0;
+	// $keep_time = 300;
+	// $cool_down_time = 600;
+	// $notice_limit = 3;
 
 	if($min_limit == 0 && $max_limit == 0) json(false, '不能为无限制');
 

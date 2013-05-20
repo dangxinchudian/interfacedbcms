@@ -42,9 +42,10 @@ class alarm extends model{
 		//检查是否存在告警规则
 		$sql = "SELECT site.domain,alarm_rule.min_limit,alarm_rule.keep_time,alarm_rule.cool_down_time,alarm_rule.notice_limit,user.day_notice_max,user.user_id,user.mail  FROM alarm_rule,user,site WHERE alarm_rule.site_id = '{$site_id}' AND alarm_rule.remove = 0 AND alarm_rule.type = 'constant' AND user.user_id = alarm_rule.user_id AND site.site_id = alarm_rule.site_id";
 		$rule = $this->db()->query($sql, 'row');
+		var_dump($rule);
 		if(empty($rule)) return false;
 		if($rule['min_limit'] == 0) return false;
-
+		
 		//检查是否触发告警规则
 		$stop_time = date('Y-m-d H:i:s');
 		$start_time = date('Y-m-d H:i:s', time() - $rule['keep_time']);
@@ -67,12 +68,13 @@ class alarm extends model{
 		if(!$alarm){
 			//没有告警需要闭合或者告警已经闭合
 			if(count($recent) > 0 && $recent[0]['status'] == 'normal') return false;
+			if(count($recent) == 0) return false;
 			else{		//发送正常告警
 				if($http_code != 200) return false;
-				send_mail($rule['mail'], "{$rule['domain_']}恢复正常", "{$rule['domain_']}恢复正常");
+				send_mail($rule['mail'], "{$rule['domain']}恢复正常", "{$rule['domain']}恢复正常");
 
 				$time = date('Y-m-d H:i:s');
-				$sql = "INSERT INTO {$database}.constant_log 
+				$sql = "INSERT INTO alarm
 				(
 					id, 
 					site_id, 

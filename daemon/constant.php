@@ -6,6 +6,7 @@ require('../database.php');
 $db = new database;
 
 require('../common.php');       //common function
+require('../phpmailer/class.phpmailer.php');
 /*for(;;){
 
 }*/
@@ -140,12 +141,13 @@ function alarm($site_id, $http_code){
         if(!$alarm){
             //没有告警需要闭合或者告警已经闭合
             if(count($recent) > 0 && $recent[0]['status'] == 'normal') return false;
+            if(count($recent) == 0) return false;
             else{       //发送正常告警
                 if($http_code != 200) return false;
-                send_mail($rule['mail'], "{$rule['domain_']}恢复正常", "{$rule['domain_']}恢复正常");
+                send_mail($rule['mail'], "{$rule['domain']}恢复正常", "{$rule['domain']}恢复正常");
 
                 $time = date('Y-m-d H:i:s');
-                $sql = "INSERT INTO {$database}.constant_log 
+                $sql = "INSERT INTO alarm
                 (
                     id, 
                     site_id, 
@@ -169,6 +171,7 @@ function alarm($site_id, $http_code){
         }
         //告警已达单次上限
        if($warning == $rule['notice_limit']) return false;
+       //var_dump($warning);
 
         //检查冷却时间
         if(count($recent) > 0 && $recent[0]['status'] == 'warning'){
