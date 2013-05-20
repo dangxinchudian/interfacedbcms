@@ -5,8 +5,8 @@
 		json(false, '未登录');
 	});
 
-	// $watch_id = filter('watch_id', '/^[0-9]{1,9}$/', 'watch_id格式错误');
-	$watch_id = 2;
+	$watch_id = filter('watch_id', '/^[0-9]{1,9}$/', 'watch_id格式错误');
+	// $watch_id = 2;
 
 	$serverModel = model('server');
 	$watch = $serverModel->selectWatch($watch_id);
