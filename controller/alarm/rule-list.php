@@ -17,11 +17,11 @@
 	if($info['remove'] > 0) json(false, '站点已经被移除');
 	if($info['user_id'] != $user_id) json(false, '不允许操作他人站点');
 	
-	$faultModel = model('fault');
+	$alarmModel = model('alarm');
 	if($type != null){
-		$rule = $faultModel->selectRule($site_id, $type);	
+		$rule = $alarmModel->selectRule($site_id, $type);	
 	}else{
-		$rule = $faultModel->selectRule($site_id);	
+		$rule = $alarmModel->selectRule($site_id);	
 	}
 
 	json(true, $rule);

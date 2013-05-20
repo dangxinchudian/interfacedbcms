@@ -24,8 +24,8 @@
 
 	if($min_limit == 0 && $max_limit == 0) json(false, '不能为无限制');
 
-	$faultModel = model('fault');
-	$info = $faultModel->getRule($rule_id);
+	$alarmModel = model('alarm');
+	$info = $alarmModel->getRule($rule_id);
 	if(empty($info)) json(false, '该规则不存在');
 	if($info['remove'] > 0) json(false, '规则已经被移除');
 	if($info['user_id'] != $user_id) json(false, '不允许操作他人规则');
@@ -38,7 +38,7 @@
 		'notice_limit' => $notice_limit
 	);
 
-	$result = $faultModel->updateRule($rule_id, $updateArray);
+	$result = $alarmModel->updateRule($rule_id, $updateArray);
 	if($result > 0) json(true, '更改成功');
 	json(false, '未更改');
 
