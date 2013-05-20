@@ -12,6 +12,13 @@
 	$page = filter('page', '/^[0-9]{1,9}$/', '页码格式错误');
 	$limit = filter('limit', '/^[0-9]{1,9}$/', '偏移格式错误');
 
+	// $site_id = 8;
+	// $type = null;
+	// $start_time = time() - 3600 * 24 *5;
+	// $stop_time = time();
+	// $page = 1;
+	// $limit = 10;
+
 	if($limit <= 0) $limit = 1;
 	if($page < 1) $page = 1;
 	$start = ($page - 1) * $limit;
@@ -33,7 +40,7 @@
 	$result['page'] = $page;
 	$result['limit'] = $limit; 
 
-	json(true, $rule);
+	json(true, $result);
 
 
 ?>
