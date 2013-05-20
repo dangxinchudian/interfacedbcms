@@ -116,6 +116,8 @@ router('site-attack-ip',function(){ require('./controller/attack/ip.php'); });
 router('site-attack-location-zh',function(){ require('./controller/attack/location-zh.php'); });
 router('site-attack-mode',function(){ require('./controller/attack/mode.php'); });
 router('site-attack-detail',function(){ require('./controller/attack/detail.php'); });
+router('site-attack-location-zh-data',function(){ require('./controller/attack/location-zh-data.php'); });
+router('site-attack-mode-data',function(){ require('./controller/attack/mode-data.php'); });
 
 router('alarm-rule-add',function(){ require('./controller/alarm/rule-add.php'); });
 router('alarm-rule-list',function(){ require('./controller/alarm/rule-list.php'); });
