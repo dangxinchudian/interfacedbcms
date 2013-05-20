@@ -242,6 +242,8 @@ class server extends model{
 	}
 
 	public function lastWatch($server_id, $table, $device_id = array()){
+		$tableResult = $this->checkTable("moserver_{$server_id}", $table);
+		if(!$tableResult) return array();
 		$start_time = date('Y-m-d H:i:s', strtotime('-2 month'));
 		$stop_time = date('Y-m-d H:i:s');
 		if(empty($device_id)){
