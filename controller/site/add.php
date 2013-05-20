@@ -24,7 +24,7 @@
 	//init alarm rule
 	$alarmModel = model('alarm');
 	$alarmModel->addRule($user_id, $result, 'constant', 0, 90, 300, 600, 3);
-	$alarmModel->addRule($user_id, $result, 'attack', 0, 90, 300, 600, 3);
+	$alarmModel->addRule($user_id, $result, 'attack', 50, 0, 300, 600, 3);
 
 	json(true, '添加成功');
 
