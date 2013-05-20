@@ -6,9 +6,8 @@
 	});
 
 	$site_id = filter('site_id', '/^[0-9]{1,9}$/', 'siteID格式错误');
-
+	$type = filter('type', '/^constant|attack$/', 'type格式错误', true);
 	// $site_id = 8;
-
 
 	$siteModel = model('site');
 	if($site_id == 0) $info = $siteModel->get($user_id, 'user_id');
@@ -19,7 +18,11 @@
 	if($info['user_id'] != $user_id) json(false, '不允许操作他人站点');
 	
 	$faultModel = model('fault');
-	$rule = $faultModel->selectRule($site_id);	
+	if($type != null){
+		$rule = $faultModel->selectRule($site_id, $type);	
+	}else{
+		$rule = $faultModel->selectRule($site_id);	
+	}
 
 	json(true, $rule);
 

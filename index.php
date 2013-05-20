@@ -81,6 +81,7 @@ router('user-mail',function(){ require('./controller/user/mail.php'); });
 router('user-mail-verify',function(){ require('./controller/user/mail-verify.php'); });
 router('user-reset',function(){ require('./controller/user/reset.php'); });
 router('user-reset-verify',function(){ require('./controller/user/reset-verify.php'); });
+router('user-get',function(){ require('./controller/user/get.php'); });
 
 router('notice-max',function(){ require('./controller/notice/max.php'); });
 
@@ -147,8 +148,8 @@ router('test3', function(){
 });
 
 router('test4', function(){
-	$fault = model('fault');
-	$fault->triggerConstant(2, 200);
+	$fault = model('alarm');
+	$fault->triggerConstant(8, 502);
 });
 
 /*================路由表<结束>========================*/
