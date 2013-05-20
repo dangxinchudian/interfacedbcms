@@ -14,7 +14,7 @@ class alarm extends model{
 			'cool_down_time' => $cool_down_time,
 			'notice_limit' => $notice_limit
 		);
-		$result = $this->db()->insert('alarm_rule', $insertArray);
+		$result = $this->db()->insert('monitor.alarm_rule', $insertArray);
 		if($result == 0) return false;
 		return $this->db()->insertId();
 	}
