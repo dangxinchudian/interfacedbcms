@@ -38,8 +38,15 @@ class alarm extends model{
 		return $this->db()->update('alarm_rule', $updateArray, "alarm_rule_id = '{$rule_id}'");
 	}
 
-	public function alarmList(){
-		
+	public function alarmList($site_id, $start_time, $stop_time, $start, $limit, $type = false){
+		if($type === false) $type = '';
+		else $type = " AND type = '{$type}' ";
+		$sql = "SELECT * FROM alarm WHERE site_id = '{$site_id}' AND time > '{$start_time}' AND time <= '{$stop_time}' {$type} ORDER BY time DESC LIMIT {$start},{$limit}";
+		$result['list'] = $this->db()->query($sql, 'array');
+		$sql = "SELECT count(id) FROM alarm WHERE site_id = '{$site_id}' AND time > '{$start_time}' AND time <= '{$stop_time}' {$type}";
+		$dbResult = $this->db()->query($sql, 'row');
+		$result['total'] = $dbResult['count(id)'];
+		return $result;
 	}
 
 	public function triggerConstant($site_id, $http_code){

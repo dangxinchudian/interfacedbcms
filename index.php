@@ -123,6 +123,7 @@ router('alarm-rule-add',function(){ require('./controller/alarm/rule-add.php'); 
 router('alarm-rule-list',function(){ require('./controller/alarm/rule-list.php'); });
 router('alarm-rule-remove',function(){ require('./controller/alarm/rule-remove.php'); });
 router('alarm-rule-modify',function(){ require('./controller/alarm/rule-modify.php'); });
+router('alarm-list',function(){ require('./controller/alarm/list.php'); });
 
 router('server-add',function(){ require('./controller/server/add.php'); });
 router('server-snmp-set',function(){ require('./controller/server/snmp-set.php'); });

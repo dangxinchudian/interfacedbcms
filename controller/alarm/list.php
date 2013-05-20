@@ -7,7 +7,14 @@
 
 	$site_id = filter('site_id', '/^[0-9]{1,9}$/', 'siteID格式错误');
 	$type = filter('type', '/^constant|attack$/', 'type格式错误', true);
-	// $site_id = 8;
+	$start_time = filter('start_time', '/^[0-9]{1,10}$/', '起始时间单位错误');
+	$stop_time = filter('stop_time', '/^[0-9]{1,10}$/', '结束时间单位错误');
+	$page = filter('page', '/^[0-9]{1,9}$/', '页码格式错误');
+	$limit = filter('limit', '/^[0-9]{1,9}$/', '偏移格式错误');
+
+	if($limit <= 0) $limit = 1;
+	if($page < 1) $page = 1;
+	$start = ($page - 1) * $limit;
 
 	$siteModel = model('site');
 	if($site_id == 0) $info = $siteModel->get($user_id, 'user_id');
@@ -19,10 +26,12 @@
 	
 	$alarmModel = model('alarm');
 	if($type != null){
-		$rule = $alarmModel->selectRule($info['site_id'], $type);	
+		$result = $alarmModel->alarmList($info['site_id'], $start_time, $stop_time, $start, $limit, $type);	
 	}else{
-		$rule = $alarmModel->selectRule($info['site_id']);	
+		$result = $alarmModel->alarmList($info['site_id'], $start_time, $stop_time, $start, $limit);	
 	}
+	$result['page'] = $page;
+	$result['limit'] = $limit; 
 
 	json(true, $rule);
 
