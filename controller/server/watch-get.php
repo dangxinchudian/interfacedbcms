@@ -19,7 +19,7 @@
 	$watch['item'] = $serverModel->item($watch['server_item_id']);
 	$watch['device'] = array();
 	if(!empty($watch['last_watch_data'])) $last_watch_data = jdecode($watch['last_watch_data']);
-	// print_r($last_watch_data);
+	unset($watch['last_watch_data']);
 
 	if($watch['item']['server_hardware_id'] != 0){
 		// $watch['device'] = $serverModel->getDevice($watch['item']['server_hardware_id'], 'hardware_id');
