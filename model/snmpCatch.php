@@ -125,7 +125,9 @@ class snmpCatch {
 	}
 
 	public function memory_total(){
-		return @$this->format(array_shift($this->snmp('1.3.6.1.2.1.25.2.2.0')));
+		$result = $this->snmp('1.3.6.1.2.1.25.2.2.0');
+		if(!$result) return $result;
+		return $this->format(array_shift($result));
 	}
 
 	private function snmp($value, $format = false){
@@ -141,6 +143,10 @@ class snmpCatch {
 		// var_dump(error_get_last());
 		$snmp = @snmprealwalk($this->ip, $this->community, $value, 1000000);
 		$error = error_get_last();
+		if(!empty($snmp)){
+			if($format) return @$this->format($snmp);
+			return $snmp;		
+		}
 		if(empty($error)){
 			if($format) return @$this->format($snmp);
 			return $snmp;

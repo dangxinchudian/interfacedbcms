@@ -90,16 +90,23 @@ class server extends model{
 	}
 
 	public function serverList($user_id, $start, $limit, $remove = 0){		//1:remove,0:normal,-1:all
-		if($remove >= 0) $remove = ' AND remove = \'{$remove}\'';
-		else $remove = '';
-		$sql = "SELECT * FROM server WHERE user_id = '{$user_id}' {$remove} LIMIT {$start},{$limit}";
+		$f = array();
+		if($remove >= 0) $f[] = " remove = '{$remove}' ";
+		if($user_id > 0) $f[] = " user_id = '{$user_id}' ";
+		$f = implode(' AND ', $f);
+		// else $remove = '';
+		$sql = "SELECT * FROM server WHERE {$f} LIMIT {$start},{$limit}";
 		return $this->db()->query($sql, 'array');
 	}
 
 	public function serverCount($user_id, $remove = 0){
-		if($remove >= 0) $remove = ' AND remove = \'{$remove}\'';
-		else $remove = '';
-		$sql = "SELECT count(server_id) FROM server WHERE user_id = '{$user_id}' {$remove}";
+		$f = array();
+		if($remove >= 0) $f[] = " remove = '{$remove}' ";
+		if($user_id > 0) $f[] = " user_id = '{$user_id}' ";
+		$f = implode(' AND ', $f);
+		// if($remove >= 0) $remove = ' AND remove = \'{$remove}\'';
+		// else $remove = '';
+		$sql = "SELECT count(server_id) FROM server WHERE {$f} ";
 		$result = $this->db()->query($sql, 'row');
 		return $result['count(server_id)'];
 	}
