@@ -76,9 +76,9 @@ class server extends model{
 		$tableArray = array(
 			'processcount_log' => "SELECT max(amount) AS max_amount,min(amount) AS min_amount,avg(amount) AS avg_amount,date_format(time,'{$typeArray[$time_unit]}') AS group_time FROM moserver_{$server_id}.processcount_log WHERE time >= '{$start_time}' AND time <= '{$stop_time}' GROUP BY group_time ORDER BY group_time ASC",
 
-			'network_log' => "SELECT device_id,max(in_speed) AS max_in_speed,min(in_speed) AS min_in_speed,avg(in_speed) AS avg_in_speed,max(out_speed) AS max_out_speed,min(out_speed) AS min_out_speed,avg(out_speed) AS avg_out_speed,date_format(time,'{$typeArray[$time_unit]}') AS group_time FROM moserver_{$server_id}.network_log WHERE time >= '{$start_time}' AND time <= '{$stop_time}' GROUP BY group_time,device_id",
+			'network_log' => "SELECT device_id,max(in_speed) AS max_in_speed,min(in_speed) AS min_in_speed,avg(in_speed) AS avg_in_speed,max(out_speed) AS max_out_speed,min(out_speed) AS min_out_speed,avg(out_speed) AS avg_out_speed,date_format(time,'{$typeArray[$time_unit]}') AS group_time FROM moserver_{$server_id}.network_log WHERE time >= '{$start_time}' AND time <= '{$stop_time}' {$device} GROUP BY group_time,device_id",
 
-			'cpu_log' => "SELECT device_id,max(used) AS max_per,min(used) AS min_per,avg(used) AS avg_per,date_format(time,'{$typeArray[$time_unit]}') AS group_time FROM moserver_{$server_id}.cpu_log WHERE time >= '{$start_time}' AND time <= '{$stop_time}' GROUP BY group_time,device_id",
+			'cpu_log' => "SELECT device_id,max(used) AS max_per,min(used) AS min_per,avg(used) AS avg_per,date_format(time,'{$typeArray[$time_unit]}') AS group_time FROM moserver_{$server_id}.cpu_log WHERE time >= '{$start_time}' {$device} AND time <= '{$stop_time}' GROUP BY group_time,device_id",
 
 			'memory_log' => "SELECT total_amount,max(used_amount) AS max_used,min(used_amount) AS min_used,avg(used_amount) AS avg_used,date_format(time,'{$typeArray[$time_unit]}') AS group_time FROM moserver_{$server_id}.memory_log WHERE time >= '{$start_time}' AND time <= '{$stop_time}' GROUP BY group_time ORDER BY group_time ASC",
 
