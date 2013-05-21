@@ -5,7 +5,10 @@
 		json(false, '未登录');
 	});
 
-	$watch_id = filter('watch_id', '/^[0-9]{1,9}$/', 'watch_id格式错误');
+	$watch_id = filter('watch_id', '/^[0-9]{1,9}$/', 'watch_id格式错误', true);
+	$server_id = filter('server_id', '/^[0-9]{1,9}$/', 'server_id格式错误', true);
+	$item_id = filter('item_id', '/^[0-9]{1,9}$/', 'item_id格式错误', true);
+	
 	$device_id = filter('device_id', '/^[0-9]{1,9}$/', 'device_id格式错误', 0);
 	$time_unit = filter('time_unit', '/^day|month|year$/', '时间单位错误');
 	$start_time = filter('start_time', '/^[0-9]{1,10}$/', '起始时间单位错误');
@@ -18,7 +21,8 @@
 	// $device_id = 16;
 
 	$serverModel = model('server');
-	$watch = $serverModel->selectWatch($watch_id);
+	if($watch_id != null) $watch = $serverModel->selectWatch($watch_id);
+	else $watch = $serverModel->selectWatch($server_id, $item_id);
 
 	if(empty($watch)) json(false, '监控不存在');
 	if($watch['remove'] > 0) json(false, '监控已经被移除');
