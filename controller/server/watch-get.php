@@ -24,6 +24,7 @@
 			$watch['device'][$key]['value'] = jdecode($value['value']);
 		}
 	}
+	if(!empty($watch['last_watch_data'])) $watch['last_watch_data'] = jdecode($watch['last_watch_data']);
 
 	json(true, $watch);
 

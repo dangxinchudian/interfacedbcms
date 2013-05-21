@@ -20,7 +20,11 @@
 	foreach ($list as $key => $value) {
 		$result =  $serverModel->selectWatch($info['server_id'], $value['server_item_id']);
 		if(empty($result)) $list[$key]['server_watch_id'] = 0;
-		else $list[$key]['server_watch_id'] = $result['server_watch_id'];
+		else{
+			if(!empty($result['last_watch_data'])) $result['last_watch_data'] = jdecode($result['last_watch_data']);
+			$list[$key]['server_watch_id'] = $result['server_watch_id'];
+			$list[$key]['watch_info'] = $result;
+		}
 	}
 	$result = array(
 		'server_id' => $info['server_id'],
