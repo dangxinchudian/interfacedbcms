@@ -74,7 +74,7 @@
 
 	// if(!empty($watch['last_watch_data'])) $watch['last_watch_data'] = jdecode($watch['last_watch_data']);
 
-	print_r($watch);
-	// json(true, $watch);
+	// print_r($watch);
+	json(true, $watch);
 
 ?>
