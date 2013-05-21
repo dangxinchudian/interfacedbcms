@@ -10,6 +10,11 @@ class user extends model{
 		}else return $_SESSION['user_id'];
 	}
 
+	public function adminCheck(){
+		if(isset($_SESSION['admin']) && $_SESSION['admin'] > 0) return true;
+		return false;
+	}
+
 	public function creat($mail, $pass){
 		$salt = random('str', 27);
 		$passwd = $this->passEncode($pass, $salt);

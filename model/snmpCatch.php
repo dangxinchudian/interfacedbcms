@@ -10,12 +10,12 @@ class snmpCatch {
 
 	public function os(){
 		$result = $this->snmp('system.sysDescr.0', true);
-		if($result === false) return false;
+		if(!$result) return $result;
 		//echo $result;
 		if(stristr($result, 'linux')) return 'linux';
 		if(stristr($result, 'unix')) return 'linux';
-		if(stristr($result, 'windows')) return 'windows';
-		return 'unkown';
+		// if(stristr($result, 'windows')) return 'windows';
+		return 'linux';
 	}
 
 	public function sys_descr(){
@@ -36,8 +36,10 @@ class snmpCatch {
 
 	public function disk(){
 		$disk = array();
+		// $result = $this->snmp('1.3.6.1.4.1.2021.99999');
+		// exit();
 		$result = $this->snmp('1.3.6.1.2.1.25.2');
-		if(!$result) return false;
+		if(!$result) return $result;
 		foreach($result as $key => $value){
 			if($label = strstr($key , 'hrStorageDescr')){
 				$label = explode('.', $label);
@@ -61,7 +63,7 @@ class snmpCatch {
 	public function network(){
 		$network = array();
 		$result = $this->snmp('1.3.6.1.2.1.2.2.1');
-		if(!$result) return false;
+		if(!$result) return $result;
 		foreach($result as $key => $value){
 			if($label = strstr($key , 'ifIndex')){
 				$index = (int)$this->format($value);
@@ -92,7 +94,7 @@ class snmpCatch {
 	public function cpu(){
 		$cpu = array();
 		$result = $this->snmp('1.3.6.1.2.1.25.3.3.1.2');
-		if(!$result) return false;
+		if(!$result) return $result;
 		foreach($result as $value){
 			$cpu[] = $this->format($value);
 		}
@@ -102,9 +104,9 @@ class snmpCatch {
 	public function process(){
 		$run = array();
 		$result = $this->snmp('1.3.6.1.2.1.25.4');
-		if(!$result) return false;
+		if(!$result) return $result;
 		$performance = $this->snmp('1.3.6.1.2.1.25.5');
-		if(!$performance) return false;
+		if(!$result) return $result;
 		if(isset($result['HOST-RESOURCES-MIB::hrSWOSIndex.0'])) unset($result['HOST-RESOURCES-MIB::hrSWOSIndex.0']);
 		foreach($result as $key => $value){
 			if(!strstr($key, 'hrSWRunIndex')) break;
@@ -127,12 +129,29 @@ class snmpCatch {
 	}
 
 	private function snmp($value, $format = false){
-		if($format) return @$this->format(snmprealwalk($this->ip, $this->community, $value));
-		return @snmprealwalk($this->ip, $this->community, $value);
+		// $live = true;
+		// function snmp_error($errno, $errstr, $errfile, $errline){
+		// 	global $live;
+		// 	var_dump($live);
+		// 	// if(strstr($errstr, 'No response')) $live = false;
+		// 	$live = false;
+		// 	echo $errstr;
+		// }
+		// set_error_handler('snmp_error');
+		// var_dump(error_get_last());
+		$snmp = @snmprealwalk($this->ip, $this->community, $value, 1000000);
+		$error = error_get_last();
+		if(empty($error)){
+			if($format) return @$this->format($snmp);
+			return $snmp;
+		}else{
+			if(strstr($error['message'], 'No response')) return false;
+			return null;
+		}
 	}
 
 	private function format($result){
-		if(!$result) return false;
+		if(!$result) return $result;
 		if(is_array($result)) $result = array_shift($result);
 		$result = str_replace(array('Timeticks: ', 'STRING: ','INTEGER: ','Counter32: ','Gauge32: '),'', $result);
 		$result = preg_replace('/^"(.*)"$/', '$1', $result);

@@ -20,6 +20,7 @@
 	//$snmpModel->ip = '61.175.163.196';
 
 	$result['os'] = $snmpModel->os();
+	if($result['os'] === NULL) json(false, 'SNMP服务对应字段抓取失败');
 	if($result['os'] === false) json(false, 'SNMP服务未开启');
 	$result['sys_descr'] = $snmpModel->sys_descr();
 	$result['sys_name'] = $snmpModel->sys_name();

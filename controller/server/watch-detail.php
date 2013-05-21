@@ -11,11 +11,11 @@
 	$start_time = filter('start_time', '/^[0-9]{1,10}$/', '起始时间单位错误');
 	$stop_time = filter('stop_time', '/^[0-9]{1,10}$/', '结束时间单位错误');
 
-	// $watch_id = 2;
+	// $watch_id = 6;
 	// $time_unit = 'day';
 	// $start_time = time() - 3600*24*5;
 	// $stop_time = time();
-	// $device_id = 4;
+	// $device_id = 16;
 
 	$serverModel = model('server');
 	$watch = $serverModel->selectWatch($watch_id);

@@ -5,10 +5,10 @@
 		json(false, '未登录');
 	});
 
-	$item_id = filter('item_id', '/^[0-9]{1,9}$/', 'itemID格式错误');
-	$server_id = filter('server_id', '/^[0-9]{1,9}$/', 'serverID格式错误');
-	// $item_id = 2;
-	// $server_id = 4;
+	// $item_id = filter('item_id', '/^[0-9]{1,9}$/', 'itemID格式错误');
+	// $server_id = filter('server_id', '/^[0-9]{1,9}$/', 'serverID格式错误');
+	$item_id = 1;
+	$server_id = 1;
 
 	$serverModel = model('server');
 	$snmpCatch = model('snmpCatch');
@@ -30,6 +30,7 @@
 		switch ($hardware['value']) {
 			case 'disk':
 				$disk = $snmpCatch->disk();
+				if($disk === NULL) json(false, 'SNMP服务对应字段抓取失败');
 				if(!$disk) json(false, '无法连接SNMP服务');
 				$device = array();
 				foreach ($disk as $key => $value) {
@@ -45,6 +46,7 @@
 
 			case 'network':
 				$network = $snmpCatch->network();
+				if($network === NULL) json(false, 'SNMP服务对应字段抓取失败');
 				if(!$network) json(false, '无法连接SNMP服务');
 				$device = array();
 				foreach ($network as $key => $value) {
@@ -60,6 +62,7 @@
 
 			case 'cpu':
 				$cpu = $snmpCatch->cpu();
+				if($cpu === NULL) json(false, 'SNMP服务对应字段抓取失败');
 				if(!$cpu) json(false, '无法连接SNMP服务');
 				$device = array();
 				foreach ($cpu as $key => $value) {
