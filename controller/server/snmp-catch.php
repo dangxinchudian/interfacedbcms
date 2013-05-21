@@ -64,7 +64,8 @@ switch ($item['table_name']) {
 
 		$watchEle = $serverModel->selectWatch($watch_id);
 		$last = jdecode($watchEle['last_watch_data']);
-		if($last) foreach ($last as $key => $value) $deviceArray[$key]['last'] = $value;
+		if($last) foreach ($last as $key => $value) $deviceArray[$value['device_id']]['last'] = $value;
+		// print_r($last);
 
 		$sql = '';
 		$time = date('Y-m-d H:i:s');
@@ -80,10 +81,15 @@ switch ($item['table_name']) {
 			$deviceArray[$key]['in_speed'] = (isset($in_speed)) ? $in_speed : 0;
 			$deviceArray[$key]['out_speed'] = (isset($out_speed)) ? $out_speed : 0;
 			$deviceArray[$key]['time'] = time();
+			$deviceArray[$key]['device_id'] = $key;
 			unset($deviceArray[$key]['last']);
 		}
 
-		$dataArray = $deviceArray;
+		$dataArray = array();
+		// $dataArray = $deviceArray;
+		foreach ($deviceArray as $key => $value) {
+			$dataArray[$serverModel->device_hash($watch['server_id'], $item['server_hardware_id'], $value['descr'].$value['physAddress'])] = $value;
+		}
 
 		break;
 
