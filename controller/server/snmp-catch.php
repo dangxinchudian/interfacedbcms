@@ -44,6 +44,7 @@ switch ($item['table_name']) {
 			$sqlArray[] = "(uuid(), '{$value['used']}', '{$value['total']}', '{$value['device_id']}', '{$time}')";
 		}
 		$sql .= implode(',', $sqlArray);
+		$dataArray = $snmpDevice;
 
 		break;
 
@@ -61,22 +62,29 @@ switch ($item['table_name']) {
 			$deviceArray[$deviceList[$key]['server_device_id']]['last'] = array();
 		}
 
-		$last = $serverModel->lastWatch($watch['server_id'], $item['table_name'], array_keys($deviceArray));
-		foreach ($last as $key => $value) $deviceArray[$value['device_id']]['last'] = $value;
+		$watchEle = $serverModel->selectWatch($watch_id);
+		$last = jdecode($watchEle['last_watch_data']);
+		if($last) foreach ($last as $key => $value) $deviceArray[$key]['last'] = $value;
 
-		// print_r($deviceArray);
 		$sql = '';
 		$time = date('Y-m-d H:i:s');
 		foreach ($deviceArray as $key => $value) {
 			if(empty($value['last'])){
 				$sql .= " INSERT INTO {$table} (id, in_total, out_total, device_id, time) VALUES (uuid(), '{$value['inOctets']}', '{$value['outOctets']}', '{$key}', '{$time}'); ";
 			}else{
-				$delta = time() - strtotime($value['last']['time']);
-				$in_speed = (int)(gmp_intval(gmp_add($value['inOctets'], "-{$value['last']['in_total']}")) / $delta);
-				$out_speed = (int)(gmp_intval(gmp_add($value['outOctets'], "-{$value['last']['out_total']}")) / $delta);
+				$delta = time() - $value['last']['time'];
+				$in_speed = (int)(gmp_intval(gmp_add($value['inOctets'], "-{$value['last']['inOctets']}")) / $delta);
+				$out_speed = (int)(gmp_intval(gmp_add($value['outOctets'], "-{$value['last']['outOctets']}")) / $delta);
 				$sql .= " INSERT INTO {$table} (id, in_total, out_total, in_speed, out_speed, device_id, time) VALUES (uuid(), '{$value['inOctets']}', '{$value['outOctets']}', '{$in_speed}', '{$out_speed}', '{$key}', '{$time}'); ";
 			}
+			$deviceArray[$key]['in_speed'] = (isset($in_speed)) ? $in_speed : 0;
+			$deviceArray[$key]['out_speed'] = (isset($out_speed)) ? $out_speed : 0;
+			$deviceArray[$key]['time'] = time();
+			unset($deviceArray[$key]['last']);
 		}
+
+		$dataArray = $deviceArray;
+
 		break;
 
 	case 'cpu_log':
@@ -101,6 +109,7 @@ switch ($item['table_name']) {
 			$sqlArray[] = "(uuid(), '{$value['load']}', '{$value['device_id']}', '{$time}')";
 		}
 		$sql .= implode(',', $sqlArray);
+		$dataArray = $snmpDevice;
 
 		break;
 
@@ -115,6 +124,10 @@ switch ($item['table_name']) {
 		foreach ($result as $key => $value) $used_memory += (int)$value['memory'];
 		$time = date('Y-m-d H:i:s');
 		$sql = " INSERT INTO {$table} (id, total_amount, used_amount, time) VALUES (uuid(), '{$total}', '{$used_memory}',  '{$time}'); ";
+		$dataArray = array(
+			'total' => $total,
+			'used_memory' => $used_memory
+		);
 
 		break;
 
@@ -124,7 +137,9 @@ switch ($item['table_name']) {
 		$count = count($result);
 		$time = date('Y-m-d H:i:s');
 		$sql = " INSERT INTO {$table} (id, amount, time) VALUES (uuid(), '{$count}',  '{$time}'); ";
-
+		$dataArray = array(
+			'count' => $count
+		);
 		break;
 
 	default:
@@ -133,7 +148,7 @@ switch ($item['table_name']) {
 }
 
 $db->query($sql, 'exec');
-$update = array('last_watch_time' => time());
+$update = array('last_watch_time' => time(), 'last_watch_data' => jencode($dataArray));
 $db->update('server_watch', $update, "server_watch_id = '{$watch_id}'");
 json(true, 'snmp catch finish!');
 

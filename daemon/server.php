@@ -31,6 +31,7 @@ for(;;){
 		}else{
 			$undo++;
 			echo "watch_id:{$self['watch_id']} [{$info['msg']}] \n";
+			if(!$info) echo "{$data}\n";
 		}
 	}, true);
 	echo date('Y-m-d H:i:s')." 成功[{$do}] 失败[{$undo}]\n";

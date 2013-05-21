@@ -252,25 +252,30 @@ class server extends model{
 		return $this->db()->query($sql, 'row');		
 	}
 
-	public function lastWatch($server_id, $table, $device_id = array()){
-		$tableResult = $this->checkTable("moserver_{$server_id}", $table);
-		if(!$tableResult) return array();
-		$start_time = date('Y-m-d H:i:s', strtotime('-2 month'));
-		$stop_time = date('Y-m-d H:i:s');
-		if(empty($device_id)){
-			$sql = "SELECT * FROM moserver_{$server_id}.{$table} WHERE time > '{$start_time}' AND time < '{$stop_time}' ORDER BY time DESC LIMIT 0,1";
-			return $this->db()->query($sql, 'row');	
-		}else{
-			$result = array();
-			foreach ($device_id as $key => $value) {
-				$sql = "SELECT * FROM moserver_{$server_id}.{$table} WHERE time > '{$start_time}' AND time < '{$stop_time}' AND device_id = '{$value}' ORDER BY time DESC LIMIT 0,1";
-				//echo $sql;
-				$row = $this->db()->query($sql, 'row');
-				if(!empty($row)) $result[] = $row;
-			}
-			return $result;
-		}
+	public function listWatch($server_id){
+		$sql = "SELECT * FROM server_watch WHERE server_id = '{$server_id}' AND remove = 0";
+		return $this->db()->query($sql, 'array');	
 	}
+
+	// public function lastWatch($watch_id){
+	// 	// $tableResult = $this->checkTable("moserver_{$server_id}", $table);
+	// 	// if(!$tableResult) return array();
+	// 	// $start_time = date('Y-m-d H:i:s', strtotime('-2 month'));
+	// 	// $stop_time = date('Y-m-d H:i:s');
+	// 	// if(empty($device_id)){
+	// 	// 	$sql = "SELECT * FROM moserver_{$server_id}.{$table} WHERE time > '{$start_time}' AND time < '{$stop_time}' ORDER BY time DESC LIMIT 0,1";
+	// 	// 	return $this->db()->query($sql, 'row');	
+	// 	// }else{
+	// 	// 	$result = array();
+	// 	// 	foreach ($device_id as $key => $value) {
+	// 	// 		$sql = "SELECT * FROM moserver_{$server_id}.{$table} WHERE time > '{$start_time}' AND time < '{$stop_time}' AND device_id = '{$value}' ORDER BY time DESC LIMIT 0,1";
+	// 	// 		//echo $sql;
+	// 	// 		$row = $this->db()->query($sql, 'row');
+	// 	// 		if(!empty($row)) $result[] = $row;
+	// 	// 	}
+	// 	// 	return $result;
+	// 	// }
+	// }
 	/*public function itemSql($item){
 		$array = array(
 			'cpu' => "CREATE TABLE IF NOT EXISTS `cpu_log` ( `id` char(36) NOT NULL, `used` tinyint(3) unsigned NOT NULL COMMENT '使用百分比', `device_id` int(10) unsigned NOT NULL COMMENT '设备ID', `time` datetime NOT NULL );",
