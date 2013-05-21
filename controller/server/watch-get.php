@@ -7,9 +7,11 @@
 
 	$watch_id = filter('watch_id', '/^[0-9]{1,9}$/', 'watch_id格式错误', true);
 	$server_id = filter('server_id', '/^[0-9]{1,9}$/', 'server_id格式错误', true);
-	$item_id = filter('watch_id', '/^[0-9]{1,9}$/', 'item_id格式错误', true);
-	// $watch_id = 1;
-	// $watch_id = 2;
+	$item_id = filter('item_id', '/^[0-9]{1,9}$/', 'item_id格式错误', true);
+
+	// $server_id = 4;
+	// $item_id = 1;
+	// $watch_id = null;
 
 	$serverModel = model('server');
 	if($watch_id != null) $watch = $serverModel->selectWatch($watch_id);
