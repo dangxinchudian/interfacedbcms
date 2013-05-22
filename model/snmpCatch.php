@@ -12,6 +12,7 @@ class snmpCatch {
 		$result = $this->snmp('system.sysDescr.0', true);
 		if(!$result) return $result;
 		//echo $result;
+		if(stristr($result, 'windows')) return 'windows';
 		if(stristr($result, 'linux')) return 'linux';
 		if(stristr($result, 'unix')) return 'linux';
 		// if(stristr($result, 'windows')) return 'windows';
