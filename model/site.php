@@ -182,16 +182,26 @@ class site extends model{
 	}
 
 	public function siteList($user_id, $start, $limit, $remove = 0){		//1:remove,0:normal,-1:all
-		if($remove >= 0) $remove = ' AND remove = \'{$remove}\'';
-		else $remove = '';
-		$sql = "SELECT * FROM site WHERE user_id = '{$user_id}' {$remove} LIMIT {$start},{$limit}";
+		$f = array();
+		if($remove >= 0) $f[] = " remove = '{$remove}' ";
+		if($user_id > 0) $f[] = " user_id = '{$user_id}' ";
+		$f = implode(' AND ', $f);
+		if(!empty($f)) $f = " WHERE {$f} ";
+		// if($remove >= 0) $remove = ' AND remove = \'{$remove}\'';
+		// else $remove = '';
+		$sql = "SELECT * FROM site {$f} LIMIT {$start},{$limit}";
 		return $this->db()->query($sql, 'array');
 	}
 
 	public function siteCount($user_id, $remove = 0){
-		if($remove >= 0) $remove = ' AND remove = \'{$remove}\'';
-		else $remove = '';
-		$sql = "SELECT count(site_id) FROM site WHERE user_id = '{$user_id}' {$remove}";
+		$f = array();
+		if($remove >= 0) $f[] = " remove = '{$remove}' ";
+		if($user_id > 0) $f[] = " user_id = '{$user_id}' ";
+		$f = implode(' AND ', $f);
+		if(!empty($f)) $f = " WHERE {$f} ";
+		// if($remove >= 0) $remove = ' AND remove = \'{$remove}\'';
+		// else $remove = '';
+		$sql = "SELECT count(site_id) FROM site {$f}";
 		$result = $this->db()->query($sql, 'row');
 		return $result['count(site_id)'];
 	}
