@@ -95,6 +95,24 @@
 				json(false, '未识别硬件格式');
 				break;
 		}
+	}else{
+		switch ($item['table_name']) {
+			case 'memory_log':
+				$result = $snmp->memory_total();
+				if($result === NULL) json(false, 'SNMP服务对应字段抓取失败');
+				if(!$result) json(false, '无法连接SNMP服务');
+				$result = $snmp->process();
+				if($result === NULL) json(false, 'SNMP服务对应字段抓取失败');
+				if(!$result) json(false, '无法连接SNMP服务');
+				break;
+
+			case 'processcount_log':
+				$result = $snmp->process();
+				if($result === NULL) json(false, 'SNMP服务对应字段抓取失败');
+				if(!$result) json(false, '无法连接SNMP服务');
+				break;
+			
+		}
 	}
 
 	$result = $serverModel->addWatch($server_id, $item_id, $item['table_name'], $user_id);

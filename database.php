@@ -11,6 +11,13 @@ class database {
 		//$this->dbObj = new PDO("mysql:host={$this->dbHost};dbname={$this->dbName};charset=UTF-8", $this->dbUser, $this->dbPass);
 		$this->dbObj = new PDO("mysql:host={$this->dbHost};dbname={$this->dbName};charset=UTF8", $this->dbUser, $this->dbPass, Array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES'UTF8';"));
 		$this->dbObj->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+		// $this->dbObj->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_SILENT);
+		// $this->dbObj->setAttribute(PDO::ATTR_TIMEOUT, 5);
+	}
+
+	public function exception($error){
+		if($error) $this->dbObj->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+		else $this->dbObj->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
 	}
 
 	public function query($sql, $type = 'array'){
