@@ -112,13 +112,13 @@ class snmpCatch {
 			if(!strstr($key, 'hrSWRunIndex')) break;
 			$id = $this->format($value);
 			$run[] = array(
-				'name' => $this->format($result["HOST-RESOURCES-MIB::hrSWRunName.{$id}"]),
-				'path' => $this->format($result["HOST-RESOURCES-MIB::hrSWRunPath.{$id}"]),
-				'parameter' => $this->format($result["HOST-RESOURCES-MIB::hrSWRunParameters.{$id}"]),
-				'type' => $this->format($result["HOST-RESOURCES-MIB::hrSWRunType.{$id}"]),
-				'status' => $this->format($result["HOST-RESOURCES-MIB::hrSWRunStatus.{$id}"]),
-				'cpu' => $this->format($performance["HOST-RESOURCES-MIB::hrSWRunPerfCPU.{$id}"]),
-				'memory' => $this->format($performance["HOST-RESOURCES-MIB::hrSWRunPerfMem.{$id}"])
+				'name' => @$this->format($result["HOST-RESOURCES-MIB::hrSWRunName.{$id}"]),
+				'path' => @$this->format($result["HOST-RESOURCES-MIB::hrSWRunPath.{$id}"]),
+				'parameter' => @$this->format($result["HOST-RESOURCES-MIB::hrSWRunParameters.{$id}"]),
+				'type' => @$this->format($result["HOST-RESOURCES-MIB::hrSWRunType.{$id}"]),
+				'status' => @$this->format($result["HOST-RESOURCES-MIB::hrSWRunStatus.{$id}"]),
+				'cpu' => @$this->format($performance["HOST-RESOURCES-MIB::hrSWRunPerfCPU.{$id}"]),
+				'memory' => @$this->format($performance["HOST-RESOURCES-MIB::hrSWRunPerfMem.{$id}"])
 			);
 		}
 		return $run;

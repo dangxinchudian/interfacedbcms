@@ -11,7 +11,7 @@ if(empty($server)) json(false, 'server不存在');
 if($server['remove'] > 0) json(false, 'server已经被移除');
 
 //判断间隔
-if($watch['last_watch_time'] + $server['period'] > time()) json(false, '间隔时间过短');
+// if($watch['last_watch_time'] + $server['period'] > time()) json(false, '间隔时间过短');
 
 $db = $serverModel->db();
 $snmp = model('snmpCatch');
@@ -125,7 +125,6 @@ switch ($item['table_name']) {
 		$total = (int)$result;
 		$result = $snmp->process();
 		if(!$result) json(false, 'snmp error!');
-
 		$used_memory = 0;
 		foreach ($result as $key => $value) $used_memory += (int)$value['memory'];
 		$time = date('Y-m-d H:i:s');

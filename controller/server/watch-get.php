@@ -29,7 +29,10 @@
 
 	$watch['item'] = $serverModel->item($watch['server_item_id']);
 	$watch['device'] = array();
-	if(!empty($watch['last_watch_data'])) $last_watch_data = jdecode($watch['last_watch_data']);
+	if(!empty($watch['last_watch_data'])){
+		$last_watch_data = jdecode($watch['last_watch_data']);
+		$watch['snmp'] = true;
+	}else $watch['snmp'] = false;
 	unset($watch['last_watch_data']);
 
 	//统计该日的信息

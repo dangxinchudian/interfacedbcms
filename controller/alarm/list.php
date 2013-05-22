@@ -27,6 +27,7 @@
 
 	$siteModel = model('site');
 	if($site_id !== null){
+		if($admin) $user_id = 0;
 		if($site_id == 0) $info = $siteModel->get($user_id, 'user_id');
 		else $info = $siteModel->get($site_id);
 
