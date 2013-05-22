@@ -38,14 +38,18 @@ class alarm extends model{
 		return $this->db()->update('alarm_rule', $updateArray, "alarm_rule_id = '{$rule_id}'");
 	}
 
-	public function alarmList($site_id, $start_time, $stop_time, $start, $limit, $type = false){
+	public function alarmList($site_id, $id = 'site_id',$start_time, $stop_time, $start, $limit, $type = false){
 		$f = array();
 		$start_time = date('Y-m-d H:i:s', $start_time);
 		$stop_time = date('Y-m-d H:i:s', $stop_time);
 		$f[] = " time >= '{$start_time}' ";
 		$f[] = " time <= '{$stop_time}' ";
 		if($type !== false) $f[] = " type = '{$type}' ";
-		if($site_id != 0) $f[] = " site_id = '{$site_id}' ";
+		if($id == 'site_id'){
+			if($site_id != 0) $f[] = " site_id = '{$site_id}' ";
+		}elseif($id == 'user_id'){
+			$f[] = " user_id = '{$site_id}' ";
+		}
 		$f = implode(' AND ', $f);
 		$sql = "SELECT * FROM alarm WHERE {$f} ORDER BY time DESC LIMIT {$start},{$limit}";
 		// echo $sql;

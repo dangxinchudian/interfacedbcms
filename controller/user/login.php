@@ -17,7 +17,7 @@
 	$enPass = $user->passEncode($pass, $info['usalt']);
 	if(strcasecmp($enPass, $info['passwd']) !== 0) json(false, '邮箱或密码错误，登录失败');
 
-	if($info['admin'] > 0) $_SESSION['admin'] = $info['admin'];
+	$_SESSION['admin'] = $info['admin'];
 	$user->login($info['user_id']);
 
 	setcookie('mail', $mail, time() + 3600 * 24 * 30, '/');
