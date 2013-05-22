@@ -39,13 +39,18 @@ class alarm extends model{
 	}
 
 	public function alarmList($site_id, $start_time, $stop_time, $start, $limit, $type = false){
+		$f = array();
 		$start_time = date('Y-m-d H:i:s', $start_time);
 		$stop_time = date('Y-m-d H:i:s', $stop_time);
-		if($type === false) $type = '';
-		else $type = " AND type = '{$type}' ";
-		$sql = "SELECT * FROM alarm WHERE site_id = '{$site_id}' AND time >= '{$start_time}' AND time <= '{$stop_time}' {$type} ORDER BY time DESC LIMIT {$start},{$limit}";
+		$f[] = " time >= '{$start_time}' ";
+		$f[] = " time <= '{$stop_time}' ";
+		if($type !== false) $f[] = " type = '{$type}' ";
+		if($site_id != 0) $f[] = " site_id = '{$site_id}' ";
+		$f = implode(' AND ', $f);
+		$sql = "SELECT * FROM alarm WHERE {$f} ORDER BY time DESC LIMIT {$start},{$limit}";
+		// echo $sql;
 		$result['list'] = $this->db()->query($sql, 'array');
-		$sql = "SELECT count(id) FROM alarm WHERE site_id = '{$site_id}' AND time >= '{$start_time}' AND time <= '{$stop_time}' {$type}";
+		$sql = "SELECT count(id) FROM alarm WHERE {$f}";
 		$dbResult = $this->db()->query($sql, 'row');
 		$result['total'] = $dbResult['count(id)'];
 		return $result;

@@ -91,7 +91,7 @@ $callback = function($data, $info, $self){
                     'site_id' => $self['site_id'],
                     'http_code' => $info['http_code']
                 );
-                print_r($info);
+                //print_r($info);
                 $result = $db->insert('constant_fault', $insertArray);
             }else{      //持续故障时间累加
                 $sql = "UPDATE constant_fault SET keep_time = keep_time + {$self['period']} WHERE id = '{$fault['id']}'";
