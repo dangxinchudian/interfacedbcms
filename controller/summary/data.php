@@ -19,22 +19,19 @@
 	// $http = array();
 	$attack = array();
 	for($i = 0 ; $i <= ($stop_time - $start_time) / (3600); $i++){
-		$attack[date('Y-m-d H', $start_time + 3600 * $i)] = 0;
+		$attack[date('Ymd H', $start_time + 3600 * $i)] = 0;
 	}
 
+	// print_r($attackDaily);
+
 	foreach ($attackDaily as $key => $value) {
-		$attack[$value['group_time']] = (int)$value['count'];
+		$attack[$value['group_time']] += (int)$value['count'];
 	}
 
 	$result = array(
 		0 => array_keys($attack),
 		1 => array_values($attack)
 	);
-
-	// $attackModel = model('attack');
-
-	// $a = $attackModel->daily($site_id, $start_time, $stop_time);
-	// print_r($a);
 
 	json(true, $result);
 
