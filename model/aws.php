@@ -31,7 +31,7 @@ class aws extends model{
 
 	public function pages($site_id, $start, $limit){
 		$table = $this->checkTable("molog_{$site_id}", 'pages');
-		if(!$table) return array();
+		if(!$table) return array('list' => array(), 'total' => 0);
 		$sql = "SELECT * FROM molog_{$site_id}.pages ORDER BY pages DESC LIMIT {$start},{$limit}";
 		$result['list'] = $this->db()->query($sql, 'array');
 		$sql = "SELECT count(id) FROM molog_{$site_id}.pages ";
@@ -42,7 +42,7 @@ class aws extends model{
 
 	public function robot($site_id, $start, $limit){
 		$table = $this->checkTable("molog_{$site_id}", 'robot');
-		if(!$table) return array();
+		if(!$table) return array('list' => array(), 'total' => 0);
 		$sql = "SELECT * FROM molog_{$site_id}.robot ORDER BY hits DESC LIMIT {$start},{$limit}";
 		$result['list'] = $this->db()->query($sql, 'array');
 		$sql = "SELECT count(id) FROM molog_{$site_id}.robot ";
@@ -60,7 +60,7 @@ class aws extends model{
 
 	public function referer($site_id, $start, $limit){
 		$table = $this->checkTable("molog_{$site_id}", 'pageref');
-		if(!$table) return array();
+		if(!$table) return array('list' => array(), 'total' => 0);
 		$sql = "SELECT * FROM molog_{$site_id}.pageref ORDER BY hits DESC LIMIT {$start},{$limit}";
 		$result['list'] = $this->db()->query($sql, 'array');
 		$sql = "SELECT count(id) FROM molog_{$site_id}.pageref ";
@@ -71,7 +71,7 @@ class aws extends model{
 
 	public function error404($site_id, $start, $limit){
 		$table = $this->checkTable("molog_{$site_id}", 'errors404');
-		if(!$table) return array();
+		if(!$table) return array('list' => array(), 'total' => 0);
 		$sql = "SELECT * FROM molog_{$site_id}.errors404 ORDER BY hits DESC LIMIT {$start},{$limit}";
 		$result['list'] = $this->db()->query($sql, 'array');
 		$sql = "SELECT count(id) FROM molog_{$site_id}.errors404 ";
@@ -82,7 +82,7 @@ class aws extends model{
 
 	public function visitor($site_id, $start, $limit){
 		$table = $this->checkTable("molog_{$site_id}", 'visitors');
-		if(!$table) return array();
+		if(!$table) return array('list' => array(), 'total' => 0);
 		$sql = "SELECT * FROM molog_{$site_id}.visitors ORDER BY hits DESC LIMIT {$start},{$limit}";
 		$result['list'] = $this->db()->query($sql, 'array');
 		$sql = "SELECT count(id) FROM molog_{$site_id}.visitors ";

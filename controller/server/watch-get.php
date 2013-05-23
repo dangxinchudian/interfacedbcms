@@ -9,8 +9,8 @@
 	$server_id = filter('server_id', '/^[0-9]{1,9}$/', 'server_id格式错误', true);
 	$item_id = filter('item_id', '/^[0-9]{1,9}$/', 'item_id格式错误', true);
 
-	// $server_id = 1;
-	// $item_id = 5;
+	// $server_id = 4;
+	// $item_id = 1;
 	// $watch_id = null;
 	// $start_time = null;
 	// $stop_time = null;
@@ -51,6 +51,7 @@
 		foreach ($watch['device'] as $key => $value) {
 			$watch['device'][$key]['value'] = jdecode($value['value']);
 			$watch['device'][$key]['last'] = $last_watch_data[$value['hash']];
+			if(empty($watch['device'][$key]['last'])) $watch['device'][$key]['last'] = array();
 			$watch['device'][$key]['summary'] = array();
 			if(isset($deviceSummary[$value['server_device_id']])){
 				$watch['device'][$key]['summary'] = $deviceSummary[$value['server_device_id']];
