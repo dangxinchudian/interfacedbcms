@@ -62,15 +62,37 @@ class attack extends model{
 	public function detail($site_id, $start_time, $stop_time, $start, $limit, $severityArray = array()){
 		$start_time = date('Y-m-d H:i:s', $start_time);
 		$stop_time = date('Y-m-d H:i:s', $stop_time);
-		$table = "mosite_{$site_id}.attack_log";
-		if(!empty($severityArray)) $severity = " AND severity in ('".implode("','", $severityArray)."')";
-		else $severity = '';
-		$sql = "SELECT * FROM {$table} WHERE time > '{$start_time}' AND time <= '{$stop_time}' {$severity} ORDER BY time DESC LIMIT {$start},{$limit}";
-		$result['list'] = $this->db()->query($sql, 'array');
-		$sql = "SELECT COUNT(client_ip) as count FROM {$table} WHERE time > '{$start_time}' AND time <= '{$stop_time}' {$severity}";
-		$dbResult = $this->db()->query($sql, 'row');
-		$result['total'] = $dbResult['count'];
-		return $result;
+		if(is_array($site_id)){
+			$tableArray[] = array();
+			$sqlList = array();
+			$sqlCount = array();
+			foreach ($site_id as $key => $value){
+				if(!empty($severityArray)) $severity = " AND severity in ('".implode("','", $severityArray)."')";
+				else $severity = '';
+				$table = "mosite_{$value}.attack_log";
+				$sqlList[] = "SELECT * FROM {$table} WHERE time > '{$start_time}' AND time <= '{$stop_time}' {$severity}";
+				$sqlCount[] = "SELECT COUNT(client_ip) as count FROM {$table} WHERE time > '{$start_time}' AND time <= '{$stop_time}' {$severity}";
+			}
+			$sql = implode(' UNION ALL ', $sqlList);
+			$sql .= " ORDER BY time DESC LIMIT {$start},{$limit}";
+			$result['list'] = $this->db()->query($sql, 'array');
+			$sql = implode(' UNION ALL ', $sqlCount);
+			$count = $this->db()->query($sql, 'array');
+			$result['count'] = 0;
+			foreach ($count as $key => $value) $result['count'] = $result['count'] + $value['count'];
+			return $result;
+			
+		}else{
+			$table = "mosite_{$site_id}.attack_log";
+			if(!empty($severityArray)) $severity = " AND severity in ('".implode("','", $severityArray)."')";
+			else $severity = '';
+			$sql = "SELECT * FROM {$table} WHERE time > '{$start_time}' AND time <= '{$stop_time}' {$severity} ORDER BY time DESC LIMIT {$start},{$limit}";
+			$result['list'] = $this->db()->query($sql, 'array');
+			$sql = "SELECT COUNT(client_ip) as count FROM {$table} WHERE time > '{$start_time}' AND time <= '{$stop_time}' {$severity}";
+			$dbResult = $this->db()->query($sql, 'row');
+			$result['total'] = $dbResult['count'];
+			return $result;
+		}
 	}
 
 	public function daily($site_id, $start_time, $stop_time){

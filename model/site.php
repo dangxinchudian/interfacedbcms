@@ -163,6 +163,11 @@ class site extends model{
 		return $this->db()->query($sql, 'row');
 	}
 
+	public function getUser($value){
+		$sql = "SELECT * FROM site WHERE user_id = '{$value}' AND remove = 0";
+		return $this->db()->query($sql, 'array');
+	}
+
 	public function remove($site_id, $destroy = false){
 		if($destroy){
 			$sql = "DROP DATABASE `molog_{$site_id}`;";

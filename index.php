@@ -85,6 +85,8 @@ router('user-get',function(){ require('./controller/user/get.php'); });
 
 router('notice-max',function(){ require('./controller/notice/max.php'); });
 
+router('summary-attack-detail',function(){ require('./controller/summary/attack-detail.php'); });
+
 router('site-add',function(){ require('./controller/site/add.php'); });
 router('site-remove',function(){ require('./controller/site/remove.php'); });
 router('site-modify',function(){ require('./controller/site/modify.php'); });
