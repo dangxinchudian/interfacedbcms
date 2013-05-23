@@ -31,6 +31,7 @@
 			$result['list'][$key]['end_time'] = date('Y-m-d H:i:s', strtotime($value['time']) + $value['keep_time']);
 		}
 		$result['list'][$key]['msg'] = errorHeader($value['http_code']);
+		$result['list'][$key]['site'] = $siteModel->get($value['site_id']);
 	}
 
 	json(true, $result);
