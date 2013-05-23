@@ -8,9 +8,9 @@
 	$site_id = filter('site_id', '/^[0-9]{1,9}$/', 'siteID格式错误');
 	$start_time = filter('start_time', '/^[0-9]{1,10}$/', '起始时间单位错误');
 	$stop_time = filter('stop_time', '/^[0-9]{1,10}$/', '结束时间单位错误');
-	/*$site_id = 0;
-	$start_time = time() - 3600*24*5;
-	$stop_time = time();*/
+	// $site_id = 0;
+	// $start_time = time() - 3600*24*5;
+	// $stop_time = time();
 
 	$siteModel = model('site');
 	if($site_id == 0) $info = $siteModel->get($user_id, 'user_id');
@@ -31,6 +31,7 @@
 		$node[$key]['fault_time'] = $constantModel->log_fault_time($info['site_id'], $start_time, $stop_time, $info['period'], $value['constant_node_id']);
 		$node[$key]['available'] = 100 - round($node[$key]['fault_time'] / $node[$key]['keep_watch_time'] * 100, 2);
 		$node[$key]['last'] = $constantModel->get_last($info['site_id'], $value['constant_node_id']);
+		if(!empty($node[$key]['last'])) $node[$key]['last']['msg'] = errorHeader($node[$key]['last']['status']);
 
 	}
 
