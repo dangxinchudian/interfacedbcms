@@ -63,7 +63,7 @@ function errorHeader($code){
 
 	$hc = array();
 	# Informational 1xx
-	$hc['0'] = 'Unable to access'; 
+	$hc['0'] = '无法连接服务器'; 
 	$hc['100'] = 'Continue'; 
 	$hc['101'] = 'Switching Protocols';
 	# Successful 2xx 

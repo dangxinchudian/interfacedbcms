@@ -48,10 +48,16 @@
 	}
 	
 	$alarmModel = model('alarm');
+	// $siteModel = model('site');
 	if($type != null){
 		$result = $alarmModel->alarmList($site_id, $id, $start_time, $stop_time, $start, $limit, $type);	
 	}else{
 		$result = $alarmModel->alarmList($site_id, $id, $start_time, $stop_time, $start, $limit);	
+	}
+
+
+	foreach ($result['list'] as $key => $value) {
+		$result['list'][$key]['site'] = $siteModel->get($value['site_id']);
 	}
 	$result['page'] = $page;
 	$result['limit'] = $limit; 
