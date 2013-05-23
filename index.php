@@ -87,6 +87,9 @@ router('notice-max',function(){ require('./controller/notice/max.php'); });
 
 router('summary-attack-detail',function(){ require('./controller/summary/attack-detail.php'); });
 router('summary-data',function(){ require('./controller/summary/data.php'); });
+router('summary-attack-mode',function(){ require('./controller/summary/attack-mode.php'); });
+router('summary-attack-location',function(){ require('./controller/summary/attack-location.php'); });
+router('summary-constant-fault',function(){ require('./controller/summary/constant-fault.php'); });
 
 router('site-add',function(){ require('./controller/site/add.php'); });
 router('site-remove',function(){ require('./controller/site/remove.php'); });

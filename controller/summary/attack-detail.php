@@ -30,6 +30,10 @@
 
 	// $attackModel = model('attack');
 	// $result = $attackModel->detail($info['site_id'], $start_time, $stop_time, $start, $limit, $severityArray);
+
+	foreach ($result['list'] as $key => $value) {
+		$result['list'][$key]['site'] = $siteModel->get($value['site_id']);
+	}
 	$result['limit'] = $limit;
 	$result['page'] = $page;
 

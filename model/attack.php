@@ -46,9 +46,23 @@ class attack extends model{
 	public function locationZh($site_id, $start_time, $stop_time){
 		$start_time = date('Y-m-d H:i:s', $start_time);
 		$stop_time = date('Y-m-d H:i:s', $stop_time);
-		$table = "mosite_{$site_id}.attack_log";
-		$sql = "SELECT count(*) AS count,zh_region FROM {$table} WHERE time > '{$start_time}' AND time <= '{$stop_time}' GROUP BY zh_region";
-		return $this->db()->query($sql, 'array');		
+		if(is_array($site_id)){
+			$tableArray[] = array();
+			$sqlList = array();
+			$sqlCount = array();
+			foreach ($site_id as $key => $value){
+				if(!empty($severityArray)) $severity = " AND severity in ('".implode("','", $severityArray)."')";
+				else $severity = '';
+				$table = "mosite_{$value}.attack_log";
+				$sqlList[] = "SELECT count(*) AS count,zh_region FROM {$table} WHERE time > '{$start_time}' AND time <= '{$stop_time}' GROUP BY zh_region";
+			}
+			$sql = implode(' UNION ALL ', $sqlList);
+			return $this->db()->query($sql, 'array');
+		}else{
+			$table = "mosite_{$site_id}.attack_log";
+			$sql = "SELECT count(*) AS count,zh_region FROM {$table} WHERE time > '{$start_time}' AND time <= '{$stop_time}' GROUP BY zh_region";
+			return $this->db()->query($sql, 'array');
+		}	
 	}
 
 	public function mode($site_id, $start_time, $stop_time){
@@ -103,17 +117,17 @@ class attack extends model{
 		return $this->db()->query($sql, 'array');	
 	}
 
-	public function hour($site_id, $start_time, $stop_time){
-		$start_time = date('Y-m-d H:i:s', $start_time);
-		$stop_time = date('Y-m-d H:i:s', $stop_time);
-		if(is_array($site_id)){
-			
-		}else{
-			$type = '%Y%m%d %H';
-			$sql = "SELECT count(client_ip) AS count,date_format(time,'{$type}') AS group_time FROM mosite_{$site_id}.attack_log WHERE time >= '{$start_time}' AND time <= '{$stop_time}' GROUP BY group_time ORDER BY group_time ASC";
-			return $this->db()->query($sql, 'array');
-		}
-	}
+	// public function hour($site_id, $start_time, $stop_time){
+	// 	$start_time = date('Y-m-d H:i:s', $start_time);
+	// 	$stop_time = date('Y-m-d H:i:s', $stop_time);
+	// 	if(is_array($site_id)){
+
+	// 	}else{
+	// 		$type = '%Y%m%d %H';
+	// 		$sql = "SELECT count(client_ip) AS count,date_format(time,'{$type}') AS group_time FROM mosite_{$site_id}.attack_log WHERE time >= '{$start_time}' AND time <= '{$stop_time}' GROUP BY group_time ORDER BY group_time ASC";
+	// 		return $this->db()->query($sql, 'array');
+	// 	}
+	// }
 }
 
 
