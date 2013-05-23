@@ -86,6 +86,13 @@ class constant extends model{
 		return $result;
 	}
 
+	public function faultCount($site_id, $start_time, $stop_time){
+		$sql = "SELECT count(id) FROM constant_fault WHERE site_id = '{$site_id}' AND time >= '{$start_time}' AND time <= '{$stop_time}'";
+		$dbResult = $this->db()->query($sql, 'row');
+		$result = $dbResult['count(id)'];
+		return $result;	
+	}
+
 
 }
 ?>

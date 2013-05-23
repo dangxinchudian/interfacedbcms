@@ -26,6 +26,7 @@
 		$constantModel = model('constant');
 		$info['fault_time'] = $constantModel->log_fault_time($info['site_id'], $start_time, $stop_time, $info['period'], 0);		//临时替代
 		$info['available'] = $constantModel->available($info['site_id'], $start_time, $stop_time);
+		$info['fault_count'] = $constantModel->faultCount($info['site_id'], $start_time, $stop_time);
 	}
 
 	if($info['server_id'] != 0){
