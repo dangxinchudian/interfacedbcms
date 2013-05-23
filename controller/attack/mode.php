@@ -24,7 +24,6 @@
 	$attackModel = model('attack');
 	$result = $attackModel->mode($info['site_id'], $start_time, $stop_time);
 
-
 	json(true, $result);
 
 
