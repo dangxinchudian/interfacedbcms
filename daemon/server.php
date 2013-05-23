@@ -8,7 +8,7 @@ $db->exception(false);
 
 require('../common.php');       //common function
 
-$url = 'http://127.0.0.1/interface/server-snmp-catch:';
+$url = 'http://demo.secon.me/interface/server-snmp-catch:';
 for(;;){
 	$time = time();
 	$sql = "SELECT server_watch.server_watch_id FROM monitor.server_watch,monitor.server WHERE server.server_id = server_watch.server_id AND server_watch.last_watch_time + server.period < $time AND server_watch.remove = '0' LIMIT 100";
