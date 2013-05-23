@@ -161,5 +161,10 @@ class alarm extends model{
 		)";
 		$this->db()->query($sql, 'exec');	
 	}
+
+	public function get($id){
+		$sql = "SELECT * FROM alarm WHERE id = '{$id}'";
+		return $this->db()->query($sql, 'row');
+	}
 }
 ?>
