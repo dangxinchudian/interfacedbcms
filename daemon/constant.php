@@ -85,6 +85,13 @@ $callback = function($data, $info, $self){
         //$fault_id
         if($info['http_code'] != 200){      //开启故障，持续故障
             if(empty($fault)){      //开启故障
+
+                //再次检查
+                for($i = 0; $i < 2; $i++){
+                    $result = httpHeader($self['url'], $self['port']);
+                    if($result['code'] == 200) return;      //若为200直接退出
+                }
+
                 $insertArray = array(
                     'time' => date('Y-m-d H:i:s'),
                     'keep_time' => $self['period'],
@@ -111,6 +118,7 @@ $callback = function($data, $info, $self){
         alarm($self['site_id'], $info['http_code']);
     }
 };
+
 
 function alarm($site_id, $http_code){
     global $db;

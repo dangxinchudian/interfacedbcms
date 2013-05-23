@@ -102,6 +102,18 @@ class attack extends model{
 		$sql = "SELECT count(client_ip) AS count,date_format(time,'{$type}') AS group_time FROM mosite_{$site_id}.attack_log WHERE time >= '{$start_time}' AND time <= '{$stop_time}' GROUP BY group_time ORDER BY group_time ASC";
 		return $this->db()->query($sql, 'array');	
 	}
+
+	public function hour($site_id, $start_time, $stop_time){
+		$start_time = date('Y-m-d H:i:s', $start_time);
+		$stop_time = date('Y-m-d H:i:s', $stop_time);
+		if(is_array($site_id)){
+			
+		}else{
+			$type = '%Y%m%d %H';
+			$sql = "SELECT count(client_ip) AS count,date_format(time,'{$type}') AS group_time FROM mosite_{$site_id}.attack_log WHERE time >= '{$start_time}' AND time <= '{$stop_time}' GROUP BY group_time ORDER BY group_time ASC";
+			return $this->db()->query($sql, 'array');
+		}
+	}
 }
 
 
