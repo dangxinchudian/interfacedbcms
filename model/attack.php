@@ -50,8 +50,6 @@ class attack extends model{
 			$tableArray[] = array();
 			$sqlList = array();
 			foreach ($site_id as $key => $value){
-				if(!empty($severityArray)) $severity = " AND severity in ('".implode("','", $severityArray)."')";
-				else $severity = '';
 				$table = "mosite_{$value}.attack_log";
 				$sqlList[] = "SELECT count(*) AS count,zh_region FROM {$table} WHERE time > '{$start_time}' AND time <= '{$stop_time}' GROUP BY zh_region";
 			}
@@ -71,8 +69,6 @@ class attack extends model{
 			$tableArray[] = array();
 			$sqlList = array();
 			foreach ($site_id as $key => $value){
-				if(!empty($severityArray)) $severity = " AND severity in ('".implode("','", $severityArray)."')";
-				else $severity = '';
 				$table = "mosite_{$value}.attack_log";
 				$sqlList[] = "SELECT count(*) AS count ,attack_type FROM {$table} WHERE time > '{$start_time}' AND time <= '{$stop_time}' GROUP BY attack_type";
 			}

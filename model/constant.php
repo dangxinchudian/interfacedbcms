@@ -78,7 +78,13 @@ class constant extends model{
 	public function fault($site_id, $start_time, $stop_time, $start, $limit){
 		$start_time = date('Y-m-d H:i:s', $start_time);
 		$stop_time = date('Y-m-d H:i:s', $stop_time);
-		$sql = "SELECT * FROM constant_fault WHERE site_id = '{$site_id}' AND time >= '{$start_time}' AND time <= '{$stop_time}' ORDER BY time DESC LIMIT {$start},{$limit}";
+		if(is_array($site_id)){
+			$site_id = implode(',', $site_id);
+			$site = " site_id in ({$site_id})";
+		}else{
+			$site = " site_id = '{$site_id}'";
+		}
+		$sql = "SELECT * FROM constant_fault WHERE {$site} AND time >= '{$start_time}' AND time <= '{$stop_time}' ORDER BY time DESC LIMIT {$start},{$limit}";
 		$result['list'] = $this->db()->query($sql, 'array');
 		$sql = "SELECT count(id) FROM constant_fault WHERE site_id = '{$site_id}' AND time >= '{$start_time}' AND time <= '{$stop_time}'";
 		$dbResult = $this->db()->query($sql, 'row');
