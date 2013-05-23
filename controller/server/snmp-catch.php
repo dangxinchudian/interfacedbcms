@@ -45,6 +45,9 @@ switch ($item['table_name']) {
 		}
 		$sql .= implode(',', $sqlArray);
 		$dataArray = $snmpDevice;
+		foreach ($dataArray as $key => $value) {
+			$dataArray[$key]['name'] = '';
+		}
 
 		break;
 
