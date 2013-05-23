@@ -80,7 +80,6 @@ class alarm extends model{
 		$alarm = true;
 		if($available >= $rule['min_limit']) $alarm = false;
 		echo $available;
-		exit();
 
 		//检查最近的notice_limit条告警
 		$sql = "SELECT time,status FROM alarm WHERE type = 'constant' AND site_id = '{$site_id}' ORDER BY time DESC LIMIT 0,{$rule['notice_limit']}";
@@ -123,18 +122,18 @@ class alarm extends model{
 		//告警已达单次上限
 		if($warning == $rule['notice_limit']) return false;
 
-
 		//检查冷却时间
 		if(count($recent) > 0 && $recent[0]['status'] == 'warning'){
 			if($recent[0]['time'] + $rule['cool_down_time'] > time()) return false;	//未冷却
 		}
+
 
 		//检查今天发送条数
 		$stop_time = date('Y-m-d H:i:s');
 		$start_time = date('Y-m-d H:i:s', strtotime(date('Y-m-d 0:0:0')));
 		$sql = "SELECT count(time) FROM alarm WHERE user_id = '{$rule['user_id']}' AND time >= '{$start_time}' AND time <= '{$stop_time}' AND status = 'warning'";
 		$day = $this->db()->query($sql, 'row');
-		if($day['count(time)'] >= $rule['day_notice_max']) return false;
+		if($rule['day_notice_max']!= 0 && $day['count(time)'] >= $rule['day_notice_max']) return false;
 
 		//	发送异常告警
 		if($http_code == 200) return false;

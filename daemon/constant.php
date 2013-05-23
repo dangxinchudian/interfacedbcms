@@ -184,7 +184,7 @@ function alarm($site_id, $http_code){
         $start_time = date('Y-m-d H:i:s', strtotime(date('Y-m-d 0:0:0')));
         $sql = "SELECT count(time) FROM alarm WHERE user_id = '{$rule['user_id']}' AND time >= '{$start_time}' AND time <= '{$stop_time}' AND status = 'warning'";
         $day = $db->query($sql, 'row');
-        if($day['count(time)'] >= $rule['day_notice_max']) return false;
+        if($rule['day_notice_max'] != 0 && $day['count(time)'] >= $rule['day_notice_max']) return false;
 
         //  发送异常告警
         if($http_code == 200) return false;

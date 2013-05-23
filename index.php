@@ -152,7 +152,7 @@ router('test3', function(){
 
 router('test4', function(){
 	$fault = model('alarm');
-	$fault->triggerConstant(20, 200);
+	$fault->triggerConstant(5, 404);
 });
 
 /*================路由表<结束>========================*/
