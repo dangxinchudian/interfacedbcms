@@ -37,6 +37,7 @@
 	$result['limit'] = $limit;
 	$result['page'] = $page;
 
+	// print_r($result);
 	json(true, $result);
 
 

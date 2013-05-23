@@ -96,7 +96,7 @@ class attack extends model{
 				if(!empty($severityArray)) $severity = " AND severity in ('".implode("','", $severityArray)."')";
 				else $severity = '';
 				$table = "mosite_{$value}.attack_log";
-				$sqlList[] = "SELECT * FROM {$table} WHERE time > '{$start_time}' AND time <= '{$stop_time}' {$severity}";
+				$sqlList[] = "SELECT *,{$value} AS site_id FROM {$table} WHERE time > '{$start_time}' AND time <= '{$stop_time}' {$severity}";
 				$sqlCount[] = "SELECT COUNT(client_ip) as count FROM {$table} WHERE time > '{$start_time}' AND time <= '{$stop_time}' {$severity}";
 			}
 			$sql = implode(' UNION ALL ', $sqlList);
