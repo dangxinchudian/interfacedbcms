@@ -118,9 +118,9 @@
 				$info['min_used'][$value['group_time']] = $value['min_used'];
 				$info['avg_used'][$value['group_time']] = $value['avg_used'];
 				$info['total_amount'][$value['group_time']] = $value['total_amount'];
-				$info['max_per'][$value['group_time']] = ($value['total_amount'] != 0) ? round($value['max_used'] / $value['total_amount'], 6) : 0;
-				$info['min_per'][$value['group_time']] = ($value['total_amount'] != 0) ? round($value['min_used'] / $value['total_amount'], 6) : 0;
-				$info['avg_per'][$value['group_time']] = ($value['total_amount'] != 0) ? round($value['avg_used'] / $value['total_amount'], 6) : 0;
+				$info['max_per'][$value['group_time']] = ($value['total_amount'] != 0) ? round($value['max_used'] / $value['total_amount'], 6) * 100: 0;
+				$info['min_per'][$value['group_time']] = ($value['total_amount'] != 0) ? round($value['min_used'] / $value['total_amount'], 6) * 100: 0;
+				$info['avg_per'][$value['group_time']] = ($value['total_amount'] != 0) ? round($value['avg_used'] / $value['total_amount'], 6) * 100: 0;
 			}
 
 			$values = array();

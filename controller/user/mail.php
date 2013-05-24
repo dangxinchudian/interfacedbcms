@@ -6,6 +6,8 @@
 		json(false, '未登录');
 	});
 
+	pass = filter('pass', '/^.{6,30}$/', '密码需要为6-30位字符');
+
 	$info = $user->get($user_id);
 	$code = $user->mailCodeCreat($user_id);
 	$html = "<a href=\"http://monitor.secon.me/mail-verify?code={$code}&mail={$info['mail']}\" target=\"_blank\">http://monitor.secon.me/mail-verify?code={$code}&mail={$info['mail']}</a>";

@@ -184,6 +184,12 @@ function send_mail($mailAddress, $title, $content){
 	else return true;
 }
 
+function send_sms($mobile, $sms){
+	$sms = urlencode($sms);
+	$url = "http://utf8.sms.webchinese.cn/?Uid=zje2008&Key=f864d6a69e13eb59906d&smsMob={$mobile}&smsText={$sms}";
+	httpHeader($url);
+}
+
 function rolling_curl($urls, $callback, $body = true){
     $queue = curl_multi_init();
     $map = array();
