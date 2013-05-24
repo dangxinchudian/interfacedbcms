@@ -50,8 +50,9 @@
 		$watch['device'] = $serverModel->getDevice($watch['server_id'], $watch['item']['server_hardware_id']);
 		foreach ($watch['device'] as $key => $value) {
 			$watch['device'][$key]['value'] = jdecode($value['value']);
-			$watch['device'][$key]['last'] = $last_watch_data[$value['hash']];
-			if(empty($watch['device'][$key]['last'])) $watch['device'][$key]['last'] = array();
+			$watch['device'][$key]['last'] = array();
+			if(isset($last_watch_data[$value['hash']])) $watch['device'][$key]['last'] = $last_watch_data[$value['hash']];
+			// if(empty($watch['device'][$key]['last'])) $watch['device'][$key]['last'] = array();
 			$watch['device'][$key]['summary'] = array();
 			if(isset($deviceSummary[$value['server_device_id']])){
 				$watch['device'][$key]['summary'] = $deviceSummary[$value['server_device_id']];
