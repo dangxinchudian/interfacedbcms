@@ -100,8 +100,8 @@ class attack extends model{
 			$result['list'] = $this->db()->query($sql, 'array');
 			$sql = implode(' UNION ALL ', $sqlCount);
 			$count = $this->db()->query($sql, 'array');
-			$result['count'] = 0;
-			foreach ($count as $key => $value) $result['count'] = $result['count'] + $value['count'];
+			$result['total'] = 0;
+			foreach ($count as $key => $value) $result['total'] = $result['total'] + $value['count'];
 			return $result;
 			
 		}else{
