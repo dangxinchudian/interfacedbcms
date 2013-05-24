@@ -83,6 +83,7 @@ router('user-reset',function(){ require('./controller/user/reset.php'); });
 router('user-reset-verify',function(){ require('./controller/user/reset-verify.php'); });
 router('user-get',function(){ require('./controller/user/get.php'); });
 router('user-mobile',function(){ require('./controller/user/mobile.php'); });
+router('user-mobile-verify',function(){ require('./controller/user/mobile-verify.php'); });
 
 router('notice-max',function(){ require('./controller/notice/max.php'); });
 

@@ -10,7 +10,7 @@
 	// $mobile = 15067175241;
 
 	$info = $user->get($user_id);
-	if(!empty($info['mobile'])) json(false, '手机必须要解绑');
+	if($info['mobile'] != 0) json(false, '手机必须要解绑');
 	$user->update($user_id, array('wait_mobile' => $mobile));
 
 	$code = $user->mobileCodeCreat($user_id);
