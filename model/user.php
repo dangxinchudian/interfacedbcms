@@ -76,7 +76,7 @@ class user extends model{
 	public function mobileCodeCreat($user_id){
 		$updateArray = array(
 			'code_mobile' => random('num', 6),
-			'code_mobile_time' => time() + 60 * 10		//有效时间为3分钟
+			'code_mobile_time' => time() + 60 * 10		//有效时间为10分钟
 		);
 		$this->update($user_id, $updateArray);
 		return $updateArray['code_mobile'];		
