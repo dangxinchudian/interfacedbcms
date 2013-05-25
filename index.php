@@ -86,6 +86,7 @@ router('user-mobile',function(){ require('./controller/user/mobile.php'); });
 router('user-mobile-verify',function(){ require('./controller/user/mobile-verify.php'); });
 
 router('notice-max',function(){ require('./controller/notice/max.php'); });
+router('notice-type',function(){ require('./controller/notice/type.php'); });
 
 router('summary-attack-detail',function(){ require('./controller/summary/attack-detail.php'); });
 router('summary-data',function(){ require('./controller/summary/data.php'); });
