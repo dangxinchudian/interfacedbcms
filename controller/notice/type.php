@@ -9,6 +9,7 @@
 
 	$mail = filter('mail', '/^0|1$/', '邮箱设置参数只能为1或0', true);
 	$mobile = filter('mobile', '/^0|1$/', '手机设置参数只能为1或0', true);
+
 	// $mail = 1;
 	// $mobile = 1;
 
