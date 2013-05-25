@@ -4,7 +4,7 @@ date_default_timezone_set('PRC');
 
 require('../database.php');
 $db = new database;
-//$db->exception(false);
+$db->exception(false);
 
 require('../common.php');       //common function
 require('../phpmailer/class.phpmailer.php');
