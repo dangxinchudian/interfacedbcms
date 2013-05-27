@@ -4,6 +4,8 @@
 	$user_id = $user->sessionCheck(function(){
 		json(false, '未登录');
 	});
+	$admin = $user->adminCheck();
+	if($admin) $user_id = 0;
 
 	$site_id = filter('site_id', '/^[0-9]{1,9}$/', 'siteID错误');
 	$time_unit = filter('time_unit', '/^day|month|year$/', '时间单位错误');
