@@ -4,6 +4,8 @@
 	$user_id = $user->sessionCheck(function(){
 		json(false, '未登录');
 	});
+	$admin = $user->adminCheck();
+	if($admin) $user_id = 0;
 
 	$page = filter('page', '/^[0-9]{1,9}$/', '页码格式错误');
 	$limit = filter('limit', '/^[0-9]{1,9}$/', '偏移格式错误');
