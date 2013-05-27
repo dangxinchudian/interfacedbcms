@@ -26,7 +26,7 @@
 
 	if(empty($info)) json(false, '站点不存在');
 	if($info['remove'] > 0) json(false, '站点已经被移除');
-	if($info['user_id'] != $user_id) json(false, '不允许操作他人站点');
+	if(!$admin) if($info['user_id'] != $user_id) json(false, '不允许操作他人站点');
 
 	$constantModel = model('constant');
 	$result = $constantModel->log_data($info['site_id'], $time_unit, $start_time, $stop_time, $node_id);
