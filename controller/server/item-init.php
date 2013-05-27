@@ -4,6 +4,7 @@
 	$user_id = $user->sessionCheck(function(){
 		json(false, '未登录');
 	});
+	$admin = $user->adminCheck();
 
 	$item_id = filter('item_id', '/^[0-9]{1,9}$/', 'itemID格式错误');
 	$server_id = filter('server_id', '/^[0-9]{1,9}$/', 'serverID格式错误');
@@ -16,7 +17,7 @@
 	$info = $serverModel->get($server_id);
 	if(empty($info)) json(false, '服务器不存在');
 	if($info['remove'] > 0) json(false, '服务器已经被移除');
-	if($info['user_id'] != $user_id) json(false, '不允许操作他人服务器');
+	if(!$admin) if($info['user_id'] != $user_id) json(false, '不允许操作他人服务器');
 	$snmpCatch->ip = $info['ip'];
 	//$snmpCatch->ip = '1.1.1.1';
 
@@ -40,7 +41,7 @@
 					);
 					
 				}
-				$serverModel->setDevice($user_id, $server_id, $item['server_hardware_id'], $device);
+				$serverModel->setDevice($info['user_id'], $server_id, $item['server_hardware_id'], $device);
 
 				break;
 
@@ -56,7 +57,7 @@
 					);
 					
 				}
-				$serverModel->setDevice($user_id, $server_id, $item['server_hardware_id'], $device);
+				$serverModel->setDevice($info['user_id'], $server_id, $item['server_hardware_id'], $device);
 
 				break;
 
@@ -72,7 +73,7 @@
 					);
 					
 				}			
-				$serverModel->setDevice($user_id, $server_id, $item['server_hardware_id'], $device);				
+				$serverModel->setDevice($info['user_id'], $server_id, $item['server_hardware_id'], $device);				
 				break;
 
 			/*case 'memory':
@@ -115,7 +116,7 @@
 		}
 	}
 
-	$result = $serverModel->addWatch($server_id, $item_id, $item['table_name'], $user_id);
+	$result = $serverModel->addWatch($server_id, $item_id, $item['table_name'], $info['user_id']);
 	if($result > 0) json(true, '初始化成功');
 	json(false, '初始化失败');
 

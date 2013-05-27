@@ -4,6 +4,7 @@
 	$user_id = $user->sessionCheck(function(){
 		json(false, '未登录');
 	});
+	$admin = $user->adminCheck();
 
 	$watch_id = filter('watch_id', '/^[0-9]{1,9}$/', 'watch_id格式错误', true);
 	$server_id = filter('server_id', '/^[0-9]{1,9}$/', 'server_id格式错误', true);
@@ -26,7 +27,7 @@
 
 	if(empty($watch)) json(false, '监控不存在');
 	if($watch['remove'] > 0) json(false, '监控已经被移除');
-	if($watch['user_id'] != $user_id) json(false, '不允许操作他人监控');
+	if(!$admin) if($watch['user_id'] != $user_id) json(false, '不允许操作他人监控');
 
 	$item = $serverModel->item($watch['server_item_id']);
 
