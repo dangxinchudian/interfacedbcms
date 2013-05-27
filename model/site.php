@@ -160,6 +160,7 @@ class site extends model{
 			$where = $whereArray[$type];
 		}else $where = ' remove = 0 ';
 		$sql = "SELECT * FROM site WHERE {$whereArray[$type]} ORDER BY creat_time ASC LIMIT 1";
+		echo $sql;
 		return $this->db()->query($sql, 'row');
 	}
 
