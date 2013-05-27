@@ -125,7 +125,7 @@ $callback = function($data, $info, $self){
 function alarm($site_id, $http_code){
 	global $db;
 	//检查是否存在告警规则
-	$sql = "SELECT site.domain,alarm_rule.min_limit,alarm_rule.keep_time,alarm_rule.cool_down_time,alarm_rule.notice_limit,user.day_notice_max,user.user_id,user.mail,user.notice_mail,user.notice_mobile,user.mobile  FROM alarm_rule,user,site WHERE alarm_rule.site_id = '{$site_id}' AND alarm_rule.remove = 0 AND alarm_rule.type = 'constant' AND user.user_id = alarm_rule.user_id AND site.site_id = alarm_rule.site_id";
+	$sql = "SELECT site.domain,alarm_rule.min_limit,alarm_rule.keep_time,alarm_rule.cool_down_time,alarm_rule.notice_limit,user.day_mail_max,user.day_mobile_max,user.user_id,user.mail,user.notice_mail,user.notice_mobile,user.mobile  FROM alarm_rule,user,site WHERE alarm_rule.site_id = '{$site_id}' AND alarm_rule.remove = 0 AND alarm_rule.type = 'constant' AND user.user_id = alarm_rule.user_id AND site.site_id = alarm_rule.site_id";
 	$rule = $db->query($sql, 'row');
 	if(empty($rule)) return false;
 	if($rule['min_limit'] == 0) return false;
@@ -207,11 +207,16 @@ function alarm($site_id, $http_code){
 	$start_time = date('Y-m-d H:i:s', strtotime(date('Y-m-d 0:0:0')));
 	$sql = "SELECT count(time) FROM alarm WHERE user_id = '{$rule['user_id']}' AND time >= '{$start_time}' AND time <= '{$stop_time}' AND status = 'warning'";
 	$day = $db->query($sql, 'row');
-	if($rule['day_notice_max'] != 0 && $day['count(time)'] >= $rule['day_notice_max']){		//不发送告警
+	if($rule['day_mail_max'] != 0 && $day['count(time)'] >= $rule['day_mail_max']){		//不发送告警
+		//return false;
+	}else{
+		if($rule['notice_mail'] == 1) send_mail($rule['mail'], "{$rule['domain']}出现异常", "出现异常");
+	}
+
+	if($rule['day_mobile_max'] != 0 && $day['count(time)'] >= $rule['day_mobile_max']){		//不发送告警
 		//return false;
 	}else{
 		//  发送异常告警
-		if($rule['notice_mail'] == 1) send_mail($rule['mail'], "{$rule['domain']}出现异常", "出现异常");
 		if($rule['notice_mobile'] == 1 && !empty($rule['mobile'])){
 			send_sms($rule['mobile'], "{$rule['domain']}出现异常");
 		}
