@@ -26,13 +26,25 @@ class server extends model{
 	}
 
 	public function get($value, $type = 'server_id'){
-		$whereArray = array(
-			'server_id' => " server_id = '{$value}' ",
-			'ip' => " ip = '{$value}' AND remove = 0 ",
-			'user_id' => " user_id = '{$value}' AND remove = 0"
-		);
-		$sql = "SELECT * FROM server WHERE {$whereArray[$type]} ORDER BY creat_time ASC LIMIT 1";
+		if(!($value == 0 && $type == 'user_id')){
+			$whereArray = array(
+				'server_id' => " server_id = '{$value}' ",
+				'ip' => " ip = '{$value}' AND remove = 0 ",
+				'user_id' => " user_id = '{$value}' AND remove = 0"
+			);
+			$where = $whereArray[$type];
+		}else $where = ' remove = 0 ';
+		$sql = "SELECT * FROM server WHERE {$where} ORDER BY creat_time ASC LIMIT 1";
 		return $this->db()->query($sql, 'row');
+
+		
+		// $whereArray = array(
+		// 	'server_id' => " server_id = '{$value}' ",
+		// 	'ip' => " ip = '{$value}' AND remove = 0 ",
+		// 	'user_id' => " user_id = '{$value}' AND remove = 0"
+		// );
+		// $sql = "SELECT * FROM server WHERE {$whereArray[$type]} ORDER BY creat_time ASC LIMIT 1";
+		// return $this->db()->query($sql, 'row');
 	}
 
 	public function remove($server_id, $destroy = false){

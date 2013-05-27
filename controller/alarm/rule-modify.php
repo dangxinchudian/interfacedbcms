@@ -6,6 +6,7 @@
 	$user_id = $user->sessionCheck(function(){
 		json(false, '未登录');
 	});
+	$admin = $user->adminCheck();
 
 	$rule_id = filter('rule_id', '/^[0-9]{1,9}$/', 'rule_id格式错误');
 	$max_limit = filter('max_limit', '/^[0-9]{1,9}$/', 'max_limit格式错误',true);
@@ -28,7 +29,7 @@
 	$info = $alarmModel->getRule($rule_id);
 	if(empty($info)) json(false, '该规则不存在');
 	if($info['remove'] > 0) json(false, '规则已经被移除');
-	if($info['user_id'] != $user_id) json(false, '不允许操作他人规则');
+	if(!$admin) if($info['user_id'] != $user_id) json(false, '不允许操作他人规则');
 
 	$updateArray = $info;
 	unset($updateArray['alarm_rule_id'], $updateArray['user_id'], $updateArray['site_id'], $updateArray['type'],$updateArray['remove']);

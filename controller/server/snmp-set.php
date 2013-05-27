@@ -4,6 +4,7 @@
 	$user_id = $user->sessionCheck(function(){
 		json(false, '未登录');
 	});
+	$admin = $user->adminCheck();
 
 	$server_id = filter('server_id', '/^[0-9]{1,9}$/', 'serverID格式错误');
 	$port = filter('port', '/^[0-9]{1,6}$/', 'port格式错误', '161');
@@ -24,7 +25,7 @@
 
 	if(empty($info)) json(false, '服务器不存在');
 	if($info['remove'] > 0) json(false, '服务器已经被移除');
-	if($info['user_id'] != $user_id) json(false, '不允许操作他人服务器');
+	if(!$admin) if($info['user_id'] != $user_id) json(false, '不允许操作他人服务器');
 
 	$updateArray = array();
 	$updateArray['snmp_port'] = $port;
