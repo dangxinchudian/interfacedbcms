@@ -4,6 +4,7 @@
 	$user_id = $user->sessionCheck(function(){
 		json(false, '未登录');
 	});
+	$admin = $user->adminCheck();
 
 	$site_id = filter('site_id', '/^[0-9]{1,9}$/', 'site_id格式错误');
 	$path = filter('path', '/^\/.{0,255}+$/', '监控路径格式错误', true);
@@ -15,7 +16,7 @@
 	$info = $siteModel->get($site_id);
 	if(empty($info)) json(false, '站点不存在');
 	if($info['remove'] > 0) json(false, '站点已经被移除');
-	if($info['user_id'] != $user_id) json(false, '不允许操作他人站点');
+	if(!$admin) if($info['user_id'] != $user_id) json(false, '你没有权限操作该站点');
 
 	$updateArray = array();
 	if($path != null) $updateArray['path'] = $path;
