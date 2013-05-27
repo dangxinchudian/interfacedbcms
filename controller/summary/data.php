@@ -4,7 +4,8 @@
 	$user_id = $user->sessionCheck(function(){
 		json(false, '未登录');
 	});
-
+	$admin = $user->adminCheck();
+	if($admin) $user_id = 0;
 
 	$start_time = time() - 60 * 60 * 24;
 	$stop_time = time();

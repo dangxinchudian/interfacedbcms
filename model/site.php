@@ -164,7 +164,8 @@ class site extends model{
 	}
 
 	public function getUser($value){
-		$sql = "SELECT * FROM site WHERE user_id = '{$value}' AND remove = 0";
+		if($value != 0) $sql = "SELECT * FROM site WHERE user_id = '{$value}' AND remove = 0";
+		else $sql = "SELECT * FROM site WHERE remove = 0";
 		return $this->db()->query($sql, 'array');
 	}
 
