@@ -13,8 +13,10 @@
 	// $server_id = -1;
 
 	$siteModel = model('site');
-	if($site_id == 0) $info = $siteModel->get($user_id, 'user_id');
-	else $info = $siteModel->get($site_id);
+	if($site_id == 0){
+		if($admin) $user_id = 0;
+		$info = $siteModel->get($user_id, 'user_id');
+	}else $info = $siteModel->get($site_id);
 
 	if(empty($info)) json(false, '站点不存在');
 	if($info['remove'] > 0) json(false, '站点已经被移除');
