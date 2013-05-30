@@ -48,6 +48,14 @@ class constant extends model{
 		return $result['count(id)'] * $period;	
 	}
 
+	public function table_fault_time($site_id, $start_time, $stop_time){
+		$start_time = date('Y-m-d H:i:s', $start_time);
+		$stop_time = date('Y-m-d H:i:s', $stop_time);
+		$sql = "SELECT sum(keep_time) FROM constant_fault WHERE time >= '{$start_time}' AND time <= '{$stop_time}' AND site_id = '{$site_id}'";
+		$result = $this->db()->query($sql, 'row');
+		return $result['sum(keep_time)'];	
+	}
+
 	public function available($site_id, $start_time, $stop_time, $node = -1){
 		$start_time = date('Y-m-d H:i:s', $start_time);
 		$stop_time = date('Y-m-d H:i:s', $stop_time);
