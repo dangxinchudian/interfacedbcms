@@ -35,7 +35,7 @@
 		if($wholeTime <= 0){
 			$available = 0;
 		}else{
-			$available = ($wholeTime - $result[$key]['fault_time']) / $wholeTime;
+			$available = round(($wholeTime - $result[$key]['fault_time']) / $wholeTime, 4) * 100;
 		}
 		$result[$key]['available'] = $available;
 
