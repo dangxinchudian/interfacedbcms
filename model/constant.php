@@ -56,6 +56,10 @@ class constant extends model{
 		return $result['sum(keep_time)'];	
 	}
 
+	// public function available_time($site_id, $start_time, $stop_time){
+		
+	// }
+
 	public function available($site_id, $start_time, $stop_time, $node = -1){
 		$start_time = date('Y-m-d H:i:s', $start_time);
 		$stop_time = date('Y-m-d H:i:s', $stop_time);

@@ -28,8 +28,16 @@
 	foreach ($result as $key => $value) {
 		//$result[$key]['work_time'] = $constantModel->work_time($value['site_id'], $start_time, $stop_time, $value['period'], 0);
 //		$result[$key]['fault_time'] = $constantModel->log_fault_time($value['site_id'], $start_time, $stop_time, $value['period'], 0);		//临时替代
-		$result[$key]['available'] = $constantModel->available($value['site_id'], $start_time, $stop_time);
+//		$result[$key]['available'] = $constantModel->available($value['site_id'], $start_time, $stop_time);
 		$result[$key]['fault_time'] = $constantModel->table_fault_time($value['site_id'], $start_time, $stop_time);
+		// $result[$key]['available'] = $constantModel->available_time($value['site_id'], $start_time, $stop_time);
+		$wholeTime = $stop_time - $start_time;
+		if($wholeTime <= 0){
+			$available = 0;
+		}else{
+			$available = ($wholeTime - $result[$key]['fault_time']) / $wholeTime;
+		}
+		$result[$key]['available'] = $available;
 
 	}
 	$array = array(
