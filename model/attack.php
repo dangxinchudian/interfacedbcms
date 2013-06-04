@@ -34,12 +34,15 @@ class attack extends model{
 		$start_time = date('Y-m-d H:i:s', $start_time);
 		$stop_time = date('Y-m-d H:i:s', $stop_time);
 		$table = "mosite_{$site_id}.attack_log";
-		$sql = "SELECT count(*) AS count,client_ip,time FROM {$table} WHERE time > '{$start_time}' AND time <= '{$stop_time}' GROUP BY client_ip ORDER BY count DESC LIMIT {$start},{$limit}";
+		$sql = "SELECT count(*) AS count,client_ip,time,zh_region,zh_country,zh_city FROM {$table} WHERE time > '{$start_time}' AND time <= '{$stop_time}' GROUP BY client_ip ORDER BY count DESC LIMIT {$start},{$limit}";
 		$result['list'] = $this->db()->query($sql, 'array');
 		//$sql = "SELECT COUNT(1) FROM (SELECT client_ip FROM {$table} GROUP BY client_ip) AS g";
 		$sql = "SELECT COUNT(DISTINCT client_ip) as count FROM {$table} WHERE time > '{$start_time}' AND time <= '{$stop_time}' ";
 		$dbResult = $this->db()->query($sql, 'row');
 		$result['total'] = $dbResult['count'];
+		$sql = "SELECT COUNT(*) as count FROM {$table} WHERE time > '{$start_time}' AND time <= '{$stop_time}' ";
+		$dbResult = $this->db()->query($sql, 'row');
+		$result['count_total'] = $dbResult['count'];
 		return $result;
 	}
 

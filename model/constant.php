@@ -53,6 +53,7 @@ class constant extends model{
 		$stop_time = date('Y-m-d H:i:s', $stop_time);
 		$sql = "SELECT sum(keep_time) FROM constant_fault WHERE time >= '{$start_time}' AND time <= '{$stop_time}' AND site_id = '{$site_id}'";
 		$result = $this->db()->query($sql, 'row');
+		if(empty($result['sum(keep_time)'])) return 0;
 		return $result['sum(keep_time)'];	
 	}
 

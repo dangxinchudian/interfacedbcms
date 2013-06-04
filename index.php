@@ -99,6 +99,9 @@ router('site-add',function(){ require('./controller/site/add.php'); });
 router('site-remove',function(){ require('./controller/site/remove.php'); });
 router('site-modify',function(){ require('./controller/site/modify.php'); });
 router('site-server',function(){ require('./controller/site/server.php'); });
+// router('site-report',function(){ require('./controller/site/report.php'); });
+
+router('export-pdf',function(){ require('./export/pdf.php'); });
 
 router('site-constant-list',function(){ require('./controller/site/constant-list.php'); });
 router('site-constant-active',function(){ require('./controller/site/constant-active.php'); });
@@ -158,7 +161,15 @@ router('test2',function(){
 });
 
 router('test3', function(){
-	echo '<form method="POST" action="./server-add"><input name="ip" value=""/><input type="submit"/></form>';
+
+require('./fpdf/fpdf.php');  
+  
+$pdf=new FPDF();  
+$pdf->AddPage();  
+$pdf->SetFont('Arial','B',16);  
+$pdf->Cell(40,10,'Hello World!测试');  
+$pdf->Output();  
+
 });
 
 router('test4', function(){
